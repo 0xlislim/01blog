@@ -48,4 +48,69 @@ public class Notification {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "related_user_id")
     private User relatedUser;
+
+    // Explicit getters and setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Boolean getRead() {
+        return read;
+    }
+
+    public void setRead(Boolean read) {
+        this.read = read;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Post getRelatedPost() {
+        return relatedPost;
+    }
+
+    public void setRelatedPost(Post relatedPost) {
+        this.relatedPost = relatedPost;
+    }
+
+    public User getRelatedUser() {
+        return relatedUser;
+    }
+
+    public void setRelatedUser(User relatedUser) {
+        this.relatedUser = relatedUser;
+    }
 }

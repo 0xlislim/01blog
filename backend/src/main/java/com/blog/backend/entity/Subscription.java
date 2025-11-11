@@ -32,4 +32,37 @@ public class Subscription {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscribed_to_id", nullable = false)
     private User subscribedTo;
+
+    // Explicit getters and setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public User getSubscriber() {
+        return subscriber;
+    }
+
+    public void setSubscriber(User subscriber) {
+        this.subscriber = subscriber;
+    }
+
+    public User getSubscribedTo() {
+        return subscribedTo;
+    }
+
+    public void setSubscribedTo(User subscribedTo) {
+        this.subscribedTo = subscribedTo;
+    }
 }
