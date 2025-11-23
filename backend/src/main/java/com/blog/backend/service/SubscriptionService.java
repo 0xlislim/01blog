@@ -2,6 +2,11 @@ package com.blog.backend.service;
 
 import com.blog.backend.entity.Subscription;
 import com.blog.backend.entity.User;
+import com.blog.backend.exception.AlreadySubscribedException;
+import com.blog.backend.exception.BannedUserException;
+import com.blog.backend.exception.ForbiddenException;
+import com.blog.backend.exception.NotSubscribedException;
+import com.blog.backend.exception.UserNotFoundException;
 import com.blog.backend.repository.SubscriptionRepository;
 import com.blog.backend.repository.UserRepository;
 import com.blog.backend.security.UserPrincipal;
@@ -30,21 +35,21 @@ public class SubscriptionService {
         Long currentUserId = principal.getId();
 
         if (currentUserId.equals(userIdToSubscribe)) {
-            throw new RuntimeException("You cannot subscribe to yourself");
+            throw new ForbiddenException("You cannot subscribe to yourself");
         }
 
         User subscriber = userRepository.findById(currentUserId)
-                .orElseThrow(() -> new RuntimeException("Current user not found"));
+                .orElseThrow(() -> new UserNotFoundException(currentUserId));
 
         User subscribedTo = userRepository.findById(userIdToSubscribe)
-                .orElseThrow(() -> new RuntimeException("User to subscribe not found"));
+                .orElseThrow(() -> new UserNotFoundException(userIdToSubscribe));
 
         if (subscribedTo.getBanned()) {
-            throw new RuntimeException("Cannot subscribe to banned user");
+            throw new BannedUserException("Cannot subscribe to banned user");
         }
 
         if (subscriptionRepository.existsBySubscriberIdAndSubscribedToId(currentUserId, userIdToSubscribe)) {
-            throw new RuntimeException("Already subscribed to this user");
+            throw new AlreadySubscribedException();
         }
 
         Subscription subscription = new Subscription();
@@ -63,7 +68,7 @@ public class SubscriptionService {
         Long currentUserId = principal.getId();
 
         if (!subscriptionRepository.existsBySubscriberIdAndSubscribedToId(currentUserId, userIdToUnsubscribe)) {
-            throw new RuntimeException("You are not subscribed to this user");
+            throw new NotSubscribedException();
         }
 
         subscriptionRepository.deleteBySubscriberIdAndSubscribedToId(currentUserId, userIdToUnsubscribe);

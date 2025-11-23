@@ -3,6 +3,8 @@ package com.blog.backend.service;
 import com.blog.backend.dto.user.UpdateProfileRequest;
 import com.blog.backend.dto.user.UserProfileResponse;
 import com.blog.backend.entity.User;
+import com.blog.backend.exception.ForbiddenException;
+import com.blog.backend.exception.UserNotFoundException;
 import com.blog.backend.repository.SubscriptionRepository;
 import com.blog.backend.repository.UserRepository;
 import com.blog.backend.security.UserPrincipal;
@@ -26,7 +28,7 @@ public class UserService {
 
     public UserProfileResponse getUserProfile(Long userId, Authentication authentication) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         Long currentUserId = null;
         if (authentication != null && authentication.isAuthenticated()) {
@@ -57,11 +59,11 @@ public class UserService {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
         if (!principal.getId().equals(userId)) {
-            throw new RuntimeException("You can only update your own profile");
+            throw new ForbiddenException("You can only update your own profile");
         }
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         if (request.getDisplayName() != null) {
             user.setDisplayName(request.getDisplayName());

@@ -4,6 +4,8 @@ import com.blog.backend.dto.notification.NotificationResponse;
 import com.blog.backend.entity.Notification;
 import com.blog.backend.entity.Post;
 import com.blog.backend.entity.User;
+import com.blog.backend.exception.ForbiddenException;
+import com.blog.backend.exception.NotificationNotFoundException;
 import com.blog.backend.repository.NotificationRepository;
 import com.blog.backend.repository.UserRepository;
 import com.blog.backend.security.UserPrincipal;
@@ -57,10 +59,10 @@ public class NotificationService {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
         Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new RuntimeException("Notification not found"));
+                .orElseThrow(() -> new NotificationNotFoundException(notificationId));
 
         if (!notification.getUser().getId().equals(principal.getId())) {
-            throw new RuntimeException("You can only mark your own notifications as read");
+            throw new ForbiddenException("You can only mark your own notifications as read");
         }
 
         notification.setRead(true);
@@ -86,10 +88,10 @@ public class NotificationService {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
         Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new RuntimeException("Notification not found"));
+                .orElseThrow(() -> new NotificationNotFoundException(notificationId));
 
         if (!notification.getUser().getId().equals(principal.getId())) {
-            throw new RuntimeException("You can only delete your own notifications");
+            throw new ForbiddenException("You can only delete your own notifications");
         }
 
         notificationRepository.delete(notification);

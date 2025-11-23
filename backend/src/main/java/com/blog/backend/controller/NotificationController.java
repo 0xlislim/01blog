@@ -39,13 +39,9 @@ public class NotificationController {
     }
 
     @PutMapping("/{notificationId}/read")
-    public ResponseEntity<?> markAsRead(@PathVariable Long notificationId, Authentication authentication) {
-        try {
-            notificationService.markAsRead(notificationId, authentication);
-            return ResponseEntity.ok(new MessageResponse("Notification marked as read"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponse> markAsRead(@PathVariable Long notificationId, Authentication authentication) {
+        notificationService.markAsRead(notificationId, authentication);
+        return ResponseEntity.ok(new MessageResponse("Notification marked as read"));
     }
 
     @PutMapping("/read-all")
@@ -55,12 +51,8 @@ public class NotificationController {
     }
 
     @DeleteMapping("/{notificationId}")
-    public ResponseEntity<?> deleteNotification(@PathVariable Long notificationId, Authentication authentication) {
-        try {
-            notificationService.deleteNotification(notificationId, authentication);
-            return ResponseEntity.ok(new MessageResponse("Notification deleted successfully"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponse> deleteNotification(@PathVariable Long notificationId, Authentication authentication) {
+        notificationService.deleteNotification(notificationId, authentication);
+        return ResponseEntity.ok(new MessageResponse("Notification deleted successfully"));
     }
 }

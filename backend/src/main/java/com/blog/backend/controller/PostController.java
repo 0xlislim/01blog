@@ -26,13 +26,9 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPost(@Valid @RequestBody PostRequest request, Authentication authentication) {
-        try {
-            PostResponse post = postService.createPost(request, authentication);
-            return ResponseEntity.status(HttpStatus.CREATED).body(post);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<PostResponse> createPost(@Valid @RequestBody PostRequest request, Authentication authentication) {
+        PostResponse post = postService.createPost(request, authentication);
+        return ResponseEntity.status(HttpStatus.CREATED).body(post);
     }
 
     @GetMapping("/{postId}")
@@ -42,26 +38,18 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<?> updatePost(
+    public ResponseEntity<PostResponse> updatePost(
             @PathVariable Long postId,
             @Valid @RequestBody PostRequest request,
             Authentication authentication) {
-        try {
-            PostResponse post = postService.updatePost(postId, request, authentication);
-            return ResponseEntity.ok(post);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+        PostResponse post = postService.updatePost(postId, request, authentication);
+        return ResponseEntity.ok(post);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable Long postId, Authentication authentication) {
-        try {
-            postService.deletePost(postId, authentication);
-            return ResponseEntity.ok(new MessageResponse("Post deleted successfully"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponse> deletePost(@PathVariable Long postId, Authentication authentication) {
+        postService.deletePost(postId, authentication);
+        return ResponseEntity.ok(new MessageResponse("Post deleted successfully"));
     }
 
     @GetMapping("/user/{userId}")
@@ -78,25 +66,17 @@ public class PostController {
 
     @PostMapping("/{postId}/like")
     public ResponseEntity<MessageResponse> toggleLike(@PathVariable Long postId, Authentication authentication) {
-        try {
-            postService.toggleLike(postId, authentication);
-            return ResponseEntity.ok(new MessageResponse("Like toggled successfully"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+        postService.toggleLike(postId, authentication);
+        return ResponseEntity.ok(new MessageResponse("Like toggled successfully"));
     }
 
     @PostMapping("/{postId}/comments")
-    public ResponseEntity<?> addComment(
+    public ResponseEntity<CommentResponse> addComment(
             @PathVariable Long postId,
             @Valid @RequestBody CommentRequest request,
             Authentication authentication) {
-        try {
-            CommentResponse comment = postService.addComment(postId, request, authentication);
-            return ResponseEntity.status(HttpStatus.CREATED).body(comment);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+        CommentResponse comment = postService.addComment(postId, request, authentication);
+        return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
 
     @GetMapping("/{postId}/comments")
@@ -106,12 +86,8 @@ public class PostController {
     }
 
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long commentId, Authentication authentication) {
-        try {
-            postService.deleteComment(commentId, authentication);
-            return ResponseEntity.ok(new MessageResponse("Comment deleted successfully"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponse> deleteComment(@PathVariable Long commentId, Authentication authentication) {
+        postService.deleteComment(commentId, authentication);
+        return ResponseEntity.ok(new MessageResponse("Comment deleted successfully"));
     }
 }

@@ -5,6 +5,9 @@ import com.blog.backend.dto.auth.LoginRequest;
 import com.blog.backend.dto.auth.RegisterRequest;
 import com.blog.backend.entity.User;
 import com.blog.backend.enums.Role;
+import com.blog.backend.exception.BannedUserException;
+import com.blog.backend.exception.UserAlreadyExistsException;
+import com.blog.backend.exception.UserNotFoundException;
 import com.blog.backend.repository.UserRepository;
 import com.blog.backend.security.JwtTokenProvider;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,11 +39,11 @@ public class AuthService {
     @Transactional
     public JwtResponse register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
+            throw new UserAlreadyExistsException("username", request.getUsername());
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new UserAlreadyExistsException("email", request.getEmail());
         }
 
         User user = new User();
@@ -76,10 +79,10 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         User user = userRepository.findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found with username/email: " + request.getUsernameOrEmail()));
 
         if (user.getBanned()) {
-            throw new RuntimeException("User is banned");
+            throw new BannedUserException();
         }
 
         String token = jwtTokenProvider.generateToken(user.getId(), user.getUsername(), user.getRole().name());

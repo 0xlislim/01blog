@@ -18,23 +18,15 @@ public class SubscriptionController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<?> subscribe(@PathVariable Long userId, Authentication authentication) {
-        try {
-            subscriptionService.subscribe(userId, authentication);
-            return ResponseEntity.ok(new MessageResponse("Subscribed successfully"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponse> subscribe(@PathVariable Long userId, Authentication authentication) {
+        subscriptionService.subscribe(userId, authentication);
+        return ResponseEntity.ok(new MessageResponse("Subscribed successfully"));
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> unsubscribe(@PathVariable Long userId, Authentication authentication) {
-        try {
-            subscriptionService.unsubscribe(userId, authentication);
-            return ResponseEntity.ok(new MessageResponse("Unsubscribed successfully"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponse> unsubscribe(@PathVariable Long userId, Authentication authentication) {
+        subscriptionService.unsubscribe(userId, authentication);
+        return ResponseEntity.ok(new MessageResponse("Unsubscribed successfully"));
     }
 
     @GetMapping("/{userId}/status")

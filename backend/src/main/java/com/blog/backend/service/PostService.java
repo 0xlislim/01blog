@@ -8,6 +8,11 @@ import com.blog.backend.entity.Comment;
 import com.blog.backend.entity.Like;
 import com.blog.backend.entity.Post;
 import com.blog.backend.entity.User;
+import com.blog.backend.exception.BannedUserException;
+import com.blog.backend.exception.CommentNotFoundException;
+import com.blog.backend.exception.ForbiddenException;
+import com.blog.backend.exception.PostNotFoundException;
+import com.blog.backend.exception.UserNotFoundException;
 import com.blog.backend.repository.*;
 import com.blog.backend.security.UserPrincipal;
 import org.springframework.security.core.Authentication;
@@ -45,10 +50,10 @@ public class PostService {
     public PostResponse createPost(PostRequest request, Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         User user = userRepository.findById(principal.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(principal.getId()));
 
         if (user.getBanned()) {
-            throw new RuntimeException("Banned users cannot create posts");
+            throw new BannedUserException("Banned users cannot create posts");
         }
 
         Post post = new Post();
@@ -64,7 +69,7 @@ public class PostService {
 
     public PostResponse getPost(Long postId, Authentication authentication) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new PostNotFoundException(postId));
 
         Long currentUserId = null;
         if (authentication != null && authentication.isAuthenticated()) {
@@ -79,10 +84,10 @@ public class PostService {
     public PostResponse updatePost(Long postId, PostRequest request, Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new PostNotFoundException(postId));
 
         if (!post.getUser().getId().equals(principal.getId())) {
-            throw new RuntimeException("You can only update your own posts");
+            throw new ForbiddenException("You can only update your own posts");
         }
 
         post.setContent(request.getContent());
@@ -98,10 +103,10 @@ public class PostService {
     public void deletePost(Long postId, Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new PostNotFoundException(postId));
 
         if (!post.getUser().getId().equals(principal.getId())) {
-            throw new RuntimeException("You can only delete your own posts");
+            throw new ForbiddenException("You can only delete your own posts");
         }
 
         postRepository.delete(post);
@@ -109,7 +114,7 @@ public class PostService {
 
     public List<PostResponse> getUserPosts(Long userId, Authentication authentication) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         Long currentUserId = null;
         if (authentication != null && authentication.isAuthenticated()) {
@@ -146,10 +151,10 @@ public class PostService {
     public void toggleLike(Long postId, Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new PostNotFoundException(postId));
 
         User user = userRepository.findById(principal.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(principal.getId()));
 
         if (likeRepository.existsByUserIdAndPostId(user.getId(), post.getId())) {
             likeRepository.deleteByUserIdAndPostId(user.getId(), post.getId());
@@ -168,13 +173,13 @@ public class PostService {
     public CommentResponse addComment(Long postId, CommentRequest request, Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new PostNotFoundException(postId));
 
         User user = userRepository.findById(principal.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(principal.getId()));
 
         if (user.getBanned()) {
-            throw new RuntimeException("Banned users cannot comment");
+            throw new BannedUserException("Banned users cannot comment");
         }
 
         Comment comment = new Comment();
@@ -199,7 +204,7 @@ public class PostService {
 
     public List<CommentResponse> getComments(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new PostNotFoundException(postId));
 
         return post.getComments().stream()
                 .map(comment -> new CommentResponse(
@@ -217,10 +222,10 @@ public class PostService {
     public void deleteComment(Long commentId, Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(() -> new CommentNotFoundException(commentId));
 
         if (!comment.getUser().getId().equals(principal.getId())) {
-            throw new RuntimeException("You can only delete your own comments");
+            throw new ForbiddenException("You can only delete your own comments");
         }
 
         commentRepository.delete(comment);

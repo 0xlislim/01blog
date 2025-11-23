@@ -22,12 +22,8 @@ public class ReportController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createReport(@Valid @RequestBody CreateReportRequest request, Authentication authentication) {
-        try {
-            ReportResponse report = adminService.createReport(request, authentication);
-            return ResponseEntity.status(HttpStatus.CREATED).body(report);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<ReportResponse> createReport(@Valid @RequestBody CreateReportRequest request, Authentication authentication) {
+        ReportResponse report = adminService.createReport(request, authentication);
+        return ResponseEntity.status(HttpStatus.CREATED).body(report);
     }
 }

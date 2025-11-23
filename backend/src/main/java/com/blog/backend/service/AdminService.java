@@ -6,6 +6,10 @@ import com.blog.backend.dto.admin.ReportResponse;
 import com.blog.backend.entity.Post;
 import com.blog.backend.entity.Report;
 import com.blog.backend.entity.User;
+import com.blog.backend.exception.ForbiddenException;
+import com.blog.backend.exception.PostNotFoundException;
+import com.blog.backend.exception.ReportNotFoundException;
+import com.blog.backend.exception.UserNotFoundException;
 import com.blog.backend.repository.PostRepository;
 import com.blog.backend.repository.ReportRepository;
 import com.blog.backend.repository.UserRepository;
@@ -51,7 +55,7 @@ public class AdminService {
     @Transactional
     public void banUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         user.setBanned(true);
         userRepository.save(user);
@@ -60,7 +64,7 @@ public class AdminService {
     @Transactional
     public void unbanUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         user.setBanned(false);
         userRepository.save(user);
@@ -69,7 +73,7 @@ public class AdminService {
     @Transactional
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         userRepository.delete(user);
     }
@@ -77,7 +81,7 @@ public class AdminService {
     @Transactional
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new PostNotFoundException(postId));
 
         postRepository.delete(post);
     }
@@ -101,13 +105,13 @@ public class AdminService {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
         User reporter = userRepository.findById(principal.getId())
-                .orElseThrow(() -> new RuntimeException("Reporter not found"));
+                .orElseThrow(() -> new UserNotFoundException(principal.getId()));
 
         User reportedUser = userRepository.findById(request.getReportedUserId())
-                .orElseThrow(() -> new RuntimeException("Reported user not found"));
+                .orElseThrow(() -> new UserNotFoundException(request.getReportedUserId()));
 
         if (reporter.getId().equals(reportedUser.getId())) {
-            throw new RuntimeException("You cannot report yourself");
+            throw new ForbiddenException("You cannot report yourself");
         }
 
         Report report = new Report();
@@ -131,7 +135,7 @@ public class AdminService {
     @Transactional
     public void deleteReport(Long reportId) {
         Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new RuntimeException("Report not found"));
+                .orElseThrow(() -> new ReportNotFoundException(reportId));
 
         reportRepository.delete(report);
     }
