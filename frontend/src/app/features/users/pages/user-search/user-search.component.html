@@ -1,0 +1,74 @@
+<div class="search-container">
+  <h1 class="page-title">Discover Users</h1>
+
+  <!-- Search Input -->
+  <mat-card class="search-card">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Search users</mat-label>
+      <input matInput [formControl]="searchControl"
+             placeholder="Search by username or display name...">
+      <mat-icon matPrefix>search</mat-icon>
+      <button mat-icon-button matSuffix *ngIf="searchControl.value"
+              (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-hint>Enter at least 2 characters to search</mat-hint>
+    </mat-form-field>
+  </mat-card>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <!-- Search Results -->
+  <div class="results-container" *ngIf="!isLoading && hasSearched">
+    <p class="results-count" *ngIf="users.length > 0">
+      Found {{ users.length }} user{{ users.length === 1 ? '' : 's' }}
+    </p>
+
+    <!-- User Cards -->
+    <div class="user-grid">
+      <mat-card *ngFor="let user of users" class="user-card"
+                (click)="viewProfile(user.id)">
+        <mat-card-content>
+          <div class="user-info">
+            <div class="avatar">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+            <div class="details">
+              <h3 class="display-name">{{ user.displayName }}</h3>
+              <p class="username">{{'@'}}{{ user.username }}</p>
+              <p class="bio" *ngIf="user.bio">{{ user.bio | slice:0:100 }}{{ user.bio.length > 100 ? '...' : '' }}</p>
+            </div>
+          </div>
+          <div class="stats">
+            <span class="stat">
+              <strong>{{ user.postCount }}</strong> posts
+            </span>
+            <span class="stat">
+              <strong>{{ user.subscriberCount }}</strong> subscribers
+            </span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- No Results -->
+    <mat-card *ngIf="users.length === 0" class="no-results-card">
+      <mat-card-content>
+        <mat-icon>search_off</mat-icon>
+        <p>No users found matching "{{ searchControl.value }}"</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Initial State -->
+  <mat-card *ngIf="!isLoading && !hasSearched" class="initial-state-card">
+    <mat-card-content>
+      <mat-icon>people</mat-icon>
+      <h3>Find people to follow</h3>
+      <p>Search for users by their username or display name</p>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,96 @@
+<div class="profile-container">
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <!-- Profile Content -->
+  <ng-container *ngIf="!isLoading && user">
+    <!-- Profile Header Card -->
+    <mat-card class="profile-header-card">
+      <div class="profile-header">
+        <div class="avatar-section">
+          <div class="avatar">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <div class="name-row">
+            <h1 class="display-name">{{ user.displayName }}</h1>
+            <mat-chip *ngIf="user.role === 'ADMIN'" color="primary" selected>
+              Admin
+            </mat-chip>
+          </div>
+          <p class="username">{{'@'}}{{ user.username }}</p>
+
+          <p class="bio" *ngIf="user.bio">{{ user.bio }}</p>
+          <p class="bio no-bio" *ngIf="!user.bio && isOwnProfile">
+            No bio yet. Click edit to add one.
+          </p>
+
+          <div class="stats-row">
+            <div class="stat">
+              <span class="stat-value">{{ user.postCount }}</span>
+              <span class="stat-label">Posts</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">{{ user.subscriberCount }}</span>
+              <span class="stat-label">Subscribers</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">{{ user.subscribedToCount }}</span>
+              <span class="stat-label">Subscribed</span>
+            </div>
+          </div>
+
+          <div class="actions-row">
+            <!-- Own Profile Actions -->
+            <button mat-raised-button color="primary" *ngIf="isOwnProfile"
+                    (click)="openEditDialog()">
+              <mat-icon>edit</mat-icon>
+              Edit Profile
+            </button>
+
+            <!-- Other User Actions -->
+            <ng-container *ngIf="!isOwnProfile">
+              <button mat-raised-button
+                      [color]="user.isSubscribed ? 'warn' : 'primary'"
+                      (click)="toggleSubscription()"
+                      [disabled]="isSubscribing">
+                <mat-spinner *ngIf="isSubscribing" diameter="18"></mat-spinner>
+                <ng-container *ngIf="!isSubscribing">
+                  <mat-icon>{{ user.isSubscribed ? 'person_remove' : 'person_add' }}</mat-icon>
+                  {{ user.isSubscribed ? 'Unsubscribe' : 'Subscribe' }}
+                </ng-container>
+              </button>
+            </ng-container>
+          </div>
+
+          <p class="member-since">
+            <mat-icon>calendar_today</mat-icon>
+            Member since {{ user.createdAt | date:'MMMM yyyy' }}
+          </p>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- User's Posts Section -->
+    <div class="posts-section">
+      <h2 class="section-title">
+        <mat-icon>article</mat-icon>
+        {{ isOwnProfile ? 'My Posts' : 'Posts' }}
+      </h2>
+
+      <!-- Posts will be loaded here via PostsListComponent in Phase 5 -->
+      <mat-card class="posts-placeholder">
+        <mat-card-content>
+          <p class="placeholder-text">
+            <mat-icon>post_add</mat-icon>
+            Posts will appear here
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+</div>

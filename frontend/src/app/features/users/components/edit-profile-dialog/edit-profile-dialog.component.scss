@@ -1,0 +1,16 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+mat-dialog-content {
+  min-width: 300px;
+
+  @media (max-width: 599px) {
+    min-width: auto;
+  }
+}
+
+mat-dialog-actions {
+  padding: 16px 0 0 0;
+}
