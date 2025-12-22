@@ -1,0 +1,71 @@
+<mat-card class="post-card">
+  <!-- Post Header -->
+  <mat-card-header *ngIf="showAuthor">
+    <div mat-card-avatar class="post-avatar" (click)="viewAuthorProfile()">
+      <mat-icon>account_circle</mat-icon>
+    </div>
+    <mat-card-title class="author-name" (click)="viewAuthorProfile()">
+      {{ post.userDisplayName }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      <span class="username" (click)="viewAuthorProfile()">{{'@'}}{{ post.username }}</span>
+      <span class="dot">·</span>
+      <span class="date">{{ post.createdAt | date:'MMM d, y, h:mm a' }}</span>
+    </mat-card-subtitle>
+
+    <!-- Post Menu (own posts only) -->
+    <button mat-icon-button [matMenuTriggerFor]="postMenu" class="post-menu-btn" *ngIf="isOwnPost">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #postMenu="matMenu">
+      <button mat-menu-item (click)="editPost()">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item (click)="deletePost()">
+        <mat-icon color="warn">delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </mat-card-header>
+
+  <!-- Post Content -->
+  <mat-card-content>
+    <p class="post-content">{{ post.content }}</p>
+
+    <!-- Media Content -->
+    <div class="media-container" *ngIf="post.mediaUrl">
+      <img *ngIf="post.mediaType === 'IMAGE'"
+           [src]="post.mediaUrl"
+           alt="Post image"
+           class="post-media">
+      <video *ngIf="post.mediaType === 'VIDEO'"
+             [src]="post.mediaUrl"
+             controls
+             class="post-media">
+      </video>
+    </div>
+  </mat-card-content>
+
+  <!-- Post Actions -->
+  <mat-card-actions>
+    <button mat-button (click)="toggleLike()" [class.liked]="post.likedByCurrentUser">
+      <mat-icon>{{ post.likedByCurrentUser ? 'favorite' : 'favorite_border' }}</mat-icon>
+      <span>{{ post.likeCount }}</span>
+    </button>
+
+    <button mat-button (click)="toggleComments()">
+      <mat-icon>{{ showComments ? 'chat' : 'chat_bubble_outline' }}</mat-icon>
+      <span>{{ post.commentCount }}</span>
+    </button>
+  </mat-card-actions>
+
+  <!-- Comments Section -->
+  <div class="comments-section" *ngIf="showComments">
+    <mat-divider></mat-divider>
+    <app-comments-section [postId]="post.id"
+                          (commentAdded)="post.commentCount = post.commentCount + 1"
+                          (commentDeleted)="post.commentCount = post.commentCount - 1">
+    </app-comments-section>
+  </div>
+</mat-card>

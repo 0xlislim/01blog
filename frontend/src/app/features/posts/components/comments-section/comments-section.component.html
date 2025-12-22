@@ -1,0 +1,54 @@
+<div class="comments-container">
+  <!-- Add Comment Form -->
+  <div class="add-comment">
+    <mat-form-field appearance="outline" class="comment-input">
+      <mat-label>Add a comment</mat-label>
+      <input matInput [formControl]="commentControl"
+             placeholder="Write a comment..."
+             (keyup.enter)="submitComment()">
+      <mat-hint>{{ commentControl.value?.length || 0 }}/500</mat-hint>
+    </mat-form-field>
+    <button mat-icon-button color="primary"
+            (click)="submitComment()"
+            [disabled]="commentControl.invalid || isSubmitting">
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="24"></mat-spinner>
+  </div>
+
+  <!-- Comments List -->
+  <div class="comments-list" *ngIf="!isLoading">
+    <div class="comment" *ngFor="let comment of comments">
+      <div class="comment-avatar" (click)="viewProfile(comment.userId)">
+        <mat-icon>account_circle</mat-icon>
+      </div>
+      <div class="comment-content">
+        <div class="comment-header">
+          <span class="comment-author" (click)="viewProfile(comment.userId)">
+            {{ comment.userDisplayName }}
+          </span>
+          <span class="comment-username" (click)="viewProfile(comment.userId)">
+            {{'@'}}{{ comment.username }}
+          </span>
+          <span class="comment-date">{{ comment.createdAt | date:'MMM d, h:mm a' }}</span>
+        </div>
+        <p class="comment-text">{{ comment.content }}</p>
+      </div>
+      <button mat-icon-button class="delete-btn"
+              *ngIf="isOwnComment(comment)"
+              (click)="deleteComment(comment.id)"
+              matTooltip="Delete comment">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- No Comments -->
+    <p class="no-comments" *ngIf="comments.length === 0">
+      No comments yet. Be the first to comment!
+    </p>
+  </div>
+</div>

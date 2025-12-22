@@ -1,0 +1,131 @@
+.comments-container {
+  padding-top: 16px;
+}
+
+.add-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  .comment-input {
+    flex: 1;
+    font-size: 14px;
+  }
+
+  button {
+    margin-top: 8px;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+.comments-list {
+  .comment {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .comment-avatar {
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: white;
+      }
+    }
+
+    .comment-content {
+      flex: 1;
+      min-width: 0;
+
+      .comment-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 4px;
+
+        .comment-author {
+          font-weight: 500;
+          font-size: 13px;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .comment-username {
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.5);
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .comment-date {
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.4);
+
+          &::before {
+            content: '·';
+            margin-right: 4px;
+          }
+        }
+      }
+
+      .comment-text {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+    }
+
+    .delete-btn {
+      opacity: 0;
+      transition: opacity 0.2s;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    &:hover .delete-btn {
+      opacity: 1;
+    }
+  }
+
+  .no-comments {
+    text-align: center;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    padding: 16px;
+    margin: 0;
+  }
+}

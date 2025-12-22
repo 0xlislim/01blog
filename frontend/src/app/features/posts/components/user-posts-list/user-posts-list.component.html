@@ -1,0 +1,37 @@
+<div class="user-posts-container">
+  <!-- Create Post Button (for own profile) -->
+  <button mat-raised-button color="primary" class="create-btn"
+          *ngIf="showCreateButton && isOwnProfile"
+          (click)="openCreatePostDialog()">
+    <mat-icon>add</mat-icon>
+    Create Post
+  </button>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="32"></mat-spinner>
+  </div>
+
+  <!-- Posts List -->
+  <div class="posts-list" *ngIf="!isLoading">
+    <app-post-card *ngFor="let post of posts"
+                   [post]="post"
+                   [showAuthor]="false"
+                   (postDeleted)="onPostDeleted($event)"
+                   (postUpdated)="onPostUpdated($event)">
+    </app-post-card>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="posts.length === 0">
+      <mat-icon>article</mat-icon>
+      <p *ngIf="isOwnProfile">You haven't posted anything yet. Share your first post!</p>
+      <p *ngIf="!isOwnProfile">This user hasn't posted anything yet.</p>
+      <button mat-raised-button color="primary"
+              *ngIf="isOwnProfile"
+              (click)="openCreatePostDialog()">
+        <mat-icon>add</mat-icon>
+        Create Post
+      </button>
+    </div>
+  </div>
+</div>

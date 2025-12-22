@@ -82,15 +82,9 @@
         {{ isOwnProfile ? 'My Posts' : 'Posts' }}
       </h2>
 
-      <!-- Posts will be loaded here via PostsListComponent in Phase 5 -->
-      <mat-card class="posts-placeholder">
-        <mat-card-content>
-          <p class="placeholder-text">
-            <mat-icon>post_add</mat-icon>
-            Posts will appear here
-          </p>
-        </mat-card-content>
-      </mat-card>
+      <app-user-posts-list [userId]="user.id"
+                           [showCreateButton]="isOwnProfile">
+      </app-user-posts-list>
     </div>
   </ng-container>
 </div>

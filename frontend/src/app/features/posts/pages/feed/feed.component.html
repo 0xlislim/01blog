@@ -1,0 +1,59 @@
+<div class="feed-container">
+  <!-- Header -->
+  <div class="feed-header">
+    <h1>Your Feed</h1>
+    <button mat-raised-button color="primary" (click)="openCreatePostDialog()">
+      <mat-icon>add</mat-icon>
+      Create Post
+    </button>
+  </div>
+
+  <!-- Create Post Card (Quick Access) -->
+  <mat-card class="create-post-card" (click)="openCreatePostDialog()">
+    <mat-card-content>
+      <div class="create-post-prompt">
+        <mat-icon>edit</mat-icon>
+        <span>What's on your mind? Share your learning journey...</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading your feed...</p>
+  </div>
+
+  <!-- Posts List -->
+  <div class="posts-list" *ngIf="!isLoading">
+    <app-post-card *ngFor="let post of posts"
+                   [post]="post"
+                   (postDeleted)="onPostDeleted($event)"
+                   (postUpdated)="onPostUpdated($event)">
+    </app-post-card>
+
+    <!-- Empty State -->
+    <mat-card class="empty-state" *ngIf="posts.length === 0">
+      <mat-card-content>
+        <mat-icon>dynamic_feed</mat-icon>
+        <h3>Your feed is empty</h3>
+        <p>Subscribe to other users to see their posts here, or create your first post!</p>
+        <div class="empty-actions">
+          <button mat-raised-button color="primary" (click)="openCreatePostDialog()">
+            <mat-icon>add</mat-icon>
+            Create Post
+          </button>
+          <button mat-stroked-button routerLink="/users/search">
+            <mat-icon>person_search</mat-icon>
+            Find Users
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Refresh FAB (Mobile) -->
+  <button mat-fab color="accent" class="refresh-fab" (click)="refreshFeed()" matTooltip="Refresh feed">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</div>

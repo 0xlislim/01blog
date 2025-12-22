@@ -1,0 +1,31 @@
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-content {
+  min-width: 300px;
+
+  @media (max-width: 599px) {
+    min-width: auto;
+  }
+}
+
+.media-preview {
+  margin-top: 16px;
+
+  .media-label {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 8px;
+  }
+
+  img, video {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+  }
+}
+
+mat-dialog-actions {
+  padding-top: 16px;
+}

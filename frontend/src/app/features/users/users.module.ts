@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { TextFieldModule } from '@angular/cdk/text-field';
+import { PostsModule } from '../posts/posts.module';
 
 import { ProfileComponent } from './pages/profile/profile.component';
 import { UserSearchComponent } from './pages/user-search/user-search.component';
@@ -23,6 +24,7 @@ const routes: Routes = [
   imports: [
     SharedModule,
     TextFieldModule,
+    PostsModule,
     RouterModule.forChild(routes)
   ]
 })

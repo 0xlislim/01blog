@@ -161,26 +161,4 @@
       color: #3f51b5;
     }
   }
-
-  .posts-placeholder {
-    mat-card-content {
-      padding: 48px;
-      text-align: center;
-
-      .placeholder-text {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        color: rgba(0, 0, 0, 0.4);
-        margin: 0;
-
-        mat-icon {
-          font-size: 48px;
-          width: 48px;
-          height: 48px;
-        }
-      }
-    }
-  }
 }
