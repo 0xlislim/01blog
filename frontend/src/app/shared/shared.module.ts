@@ -28,6 +28,7 @@ import { MatDividerModule } from '@angular/material/divider';
 
 // Shared Components
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 const MaterialModules = [
   MatButtonModule,
@@ -55,7 +56,8 @@ const MaterialModules = [
 
 @NgModule({
   declarations: [
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    FileUploadComponent
   ],
   imports: [
     CommonModule,
@@ -70,7 +72,8 @@ const MaterialModules = [
     ReactiveFormsModule,
     RouterModule,
     ...MaterialModules,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    FileUploadComponent
   ]
 })
 export class SharedModule { }

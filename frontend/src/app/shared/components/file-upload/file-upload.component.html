@@ -1,0 +1,58 @@
+<!-- Hidden File Input -->
+<input type="file"
+       #fileInput
+       hidden
+       [accept]="acceptedTypes"
+       (change)="onFileInputChange($event)"
+       [disabled]="disabled">
+
+<!-- Upload Area (when no file selected) -->
+<div class="upload-area"
+     *ngIf="!uploadedFile"
+     [class.drag-over]="isDragOver"
+     [class.disabled]="disabled"
+     (dragover)="onDragOver($event)"
+     (dragleave)="onDragLeave($event)"
+     (drop)="onDrop($event)"
+     (click)="openFileDialog()">
+  <mat-icon>cloud_upload</mat-icon>
+  <p class="upload-text">Drag and drop a file here</p>
+  <p class="upload-hint">or click to browse</p>
+  <p class="upload-formats">
+    Supported: JPEG, PNG, GIF, MP4, WEBM (max {{ config.maxSizeMB }}MB)
+  </p>
+</div>
+
+<!-- File Preview (when file selected) -->
+<div class="preview-area" *ngIf="uploadedFile">
+  <div class="preview-container">
+    <!-- Image Preview -->
+    <img *ngIf="uploadedFile.type === 'IMAGE'"
+         [src]="uploadedFile.preview"
+         alt="Preview"
+         class="preview-media">
+
+    <!-- Video Preview -->
+    <video *ngIf="uploadedFile.type === 'VIDEO'"
+           [src]="uploadedFile.preview"
+           controls
+           class="preview-media">
+    </video>
+
+    <!-- Remove Button -->
+    <button mat-icon-button
+            class="remove-btn"
+            (click)="removeFile()"
+            [disabled]="disabled"
+            matTooltip="Remove file">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- File Info -->
+  <div class="file-info">
+    <mat-icon>{{ uploadedFile.type === 'IMAGE' ? 'image' : 'videocam' }}</mat-icon>
+    <span class="file-name">{{ uploadedFile.file.name }}</span>
+    <span class="file-size">{{ formatFileSize(uploadedFile.file.size) }}</span>
+  </div>
+</div>

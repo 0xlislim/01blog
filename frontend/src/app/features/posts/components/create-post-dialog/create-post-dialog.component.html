@@ -19,33 +19,22 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Media Upload -->
+    <!-- Media Upload Component -->
     <div class="media-upload-section">
-      <input type="file"
-             #fileInput
-             hidden
-             accept="image/jpeg,image/png,image/gif,video/mp4,video/webm"
-             (change)="onFileSelected($event)">
-
-      <button mat-stroked-button type="button"
-              (click)="fileInput.click()"
-              *ngIf="!mediaPreview">
-        <mat-icon>add_photo_alternate</mat-icon>
-        Add Photo/Video
-      </button>
-
-      <!-- Media Preview -->
-      <div class="media-preview" *ngIf="mediaPreview">
-        <img *ngIf="mediaType === 'IMAGE'" [src]="mediaPreview" alt="Preview">
-        <video *ngIf="mediaType === 'VIDEO'" [src]="mediaPreview" controls></video>
-        <button mat-icon-button class="remove-media-btn" (click)="removeMedia()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
+      <app-file-upload
+        [uploadedFile]="uploadedFile"
+        [disabled]="isSubmitting"
+        (fileSelected)="onFileSelected($event)"
+        (fileRemoved)="onFileRemoved()"
+        (validationError)="onValidationError($event)">
+      </app-file-upload>
     </div>
 
     <!-- Upload Progress -->
-    <mat-progress-bar *ngIf="isUploading" mode="indeterminate"></mat-progress-bar>
+    <div class="upload-progress" *ngIf="isUploading">
+      <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+      <span class="progress-text">Uploading... {{ uploadProgress }}%</span>
+    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
