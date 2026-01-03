@@ -1,0 +1,71 @@
+<div class="notification-page">
+  <div class="page-header">
+    <h1>Notifications</h1>
+    <button mat-stroked-button
+            *ngIf="hasUnread"
+            (click)="markAllAsRead()">
+      <mat-icon>done_all</mat-icon>
+      Mark all as read
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <!-- Notifications Tabs -->
+  <mat-card *ngIf="!isLoading" class="notifications-card">
+    <mat-tab-group [(selectedIndex)]="selectedTab">
+      <!-- All Notifications Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          All
+          <span class="tab-badge" *ngIf="allNotifications.length > 0">
+            {{ allNotifications.length }}
+          </span>
+        </ng-template>
+
+        <div class="notifications-list" *ngIf="allNotifications.length > 0">
+          <app-notification-item
+            *ngFor="let notification of allNotifications"
+            [notification]="notification"
+            (markAsRead)="onMarkAsRead($event)"
+            (delete)="onDelete($event)">
+          </app-notification-item>
+        </div>
+
+        <div class="empty-state" *ngIf="allNotifications.length === 0">
+          <mat-icon>notifications_none</mat-icon>
+          <p>No notifications yet</p>
+          <span>When you get notifications, they'll show up here</span>
+        </div>
+      </mat-tab>
+
+      <!-- Unread Notifications Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          Unread
+          <span class="tab-badge unread" *ngIf="unreadNotifications.length > 0">
+            {{ unreadNotifications.length }}
+          </span>
+        </ng-template>
+
+        <div class="notifications-list" *ngIf="unreadNotifications.length > 0">
+          <app-notification-item
+            *ngFor="let notification of unreadNotifications"
+            [notification]="notification"
+            (markAsRead)="onMarkAsRead($event)"
+            (delete)="onDelete($event)">
+          </app-notification-item>
+        </div>
+
+        <div class="empty-state" *ngIf="unreadNotifications.length === 0">
+          <mat-icon>done_all</mat-icon>
+          <p>All caught up!</p>
+          <span>You have no unread notifications</span>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>
