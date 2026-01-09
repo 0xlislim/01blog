@@ -5,8 +5,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../../../core/services/user.service';
 import { SubscriptionService } from '../../../../core/services/subscription.service';
 import { AuthService } from '../../../../core/services/auth.service';
-import { UserProfile } from '../../../../core/models';
+import { ReportService } from '../../../../core/services/report.service';
+import { UserProfile, CreateReportRequest } from '../../../../core/models';
 import { EditProfileDialogComponent } from '../../components/edit-profile-dialog/edit-profile-dialog.component';
+import { ReportDialogComponent } from '../../components/report-dialog/report-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -25,6 +27,7 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private subscriptionService: SubscriptionService,
     private authService: AuthService,
+    private reportService: ReportService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
@@ -144,5 +147,36 @@ export class ProfileComponent implements OnInit {
         }
       });
     }
+  }
+
+  openReportDialog(): void {
+    if (!this.user || this.isOwnProfile) return;
+
+    const dialogRef = this.dialog.open(ReportDialogComponent, {
+      width: '450px',
+      data: {
+        userId: this.user.id,
+        username: this.user.username
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: CreateReportRequest | undefined) => {
+      if (result) {
+        this.reportService.createReport(result).subscribe({
+          next: () => {
+            this.snackBar.open('Report submitted successfully', 'Close', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+          },
+          error: () => {
+            this.snackBar.open('Failed to submit report', 'Close', {
+              duration: 5000,
+              panelClass: ['error-snackbar']
+            });
+          }
+        });
+      }
+    });
   }
 }

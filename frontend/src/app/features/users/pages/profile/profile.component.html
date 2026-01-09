@@ -64,6 +64,11 @@
                   {{ user.isSubscribed ? 'Unsubscribe' : 'Subscribe' }}
                 </ng-container>
               </button>
+
+              <button mat-stroked-button color="warn" (click)="openReportDialog()">
+                <mat-icon>flag</mat-icon>
+                Report
+              </button>
             </ng-container>
           </div>
 

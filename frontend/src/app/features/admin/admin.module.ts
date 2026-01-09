@@ -2,12 +2,16 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+
 const routes: Routes = [
-  // Routes will be added in Phase 9
+  { path: '', component: DashboardComponent }
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    DashboardComponent
+  ],
   imports: [
     SharedModule,
     RouterModule.forChild(routes)

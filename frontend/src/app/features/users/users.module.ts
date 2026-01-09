@@ -7,6 +7,7 @@ import { PostsModule } from '../posts/posts.module';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { UserSearchComponent } from './pages/user-search/user-search.component';
 import { EditProfileDialogComponent } from './components/edit-profile-dialog/edit-profile-dialog.component';
+import { ReportDialogComponent } from './components/report-dialog/report-dialog.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'profile', pathMatch: 'full' },
@@ -19,7 +20,8 @@ const routes: Routes = [
   declarations: [
     ProfileComponent,
     UserSearchComponent,
-    EditProfileDialogComponent
+    EditProfileDialogComponent,
+    ReportDialogComponent
   ],
   imports: [
     SharedModule,

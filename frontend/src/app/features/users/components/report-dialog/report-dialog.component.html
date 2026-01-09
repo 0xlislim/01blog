@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Report User</h2>
+
+<form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <p class="report-info">
+      You are about to report <strong>{{'@'}}{{ data.username }}</strong>.
+      Please provide a detailed reason for this report.
+    </p>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Reason for Report</mat-label>
+      <textarea matInput formControlName="reason"
+                placeholder="Describe why you are reporting this user..."
+                rows="4"
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="4"
+                cdkAutosizeMaxRows="8"></textarea>
+      <mat-hint align="end">{{ reportForm.get('reason')?.value?.length || 0 }}/500</mat-hint>
+      <mat-error *ngIf="reportForm.get('reason')?.invalid">
+        {{ getErrorMessage() }}
+      </mat-error>
+    </mat-form-field>
+
+    <p class="report-warning">
+      <mat-icon color="warn">warning</mat-icon>
+      False reports may result in action against your account.
+    </p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()" [disabled]="isSubmitting">
+      Cancel
+    </button>
+    <button mat-raised-button color="warn" type="submit"
+            [disabled]="reportForm.invalid || isSubmitting">
+      <mat-spinner *ngIf="isSubmitting" diameter="18"></mat-spinner>
+      <span *ngIf="!isSubmitting">Submit Report</span>
+    </button>
+  </mat-dialog-actions>
+</form>

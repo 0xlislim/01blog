@@ -1,0 +1,263 @@
+<div class="admin-dashboard">
+  <h1 class="dashboard-title">
+    <mat-icon>admin_panel_settings</mat-icon>
+    Admin Dashboard
+  </h1>
+
+  <mat-tab-group animationDuration="200ms">
+    <!-- Users Tab -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>people</mat-icon>
+        <span class="tab-label">Users ({{ users.length }})</span>
+      </ng-template>
+
+      <div class="tab-content">
+        <div class="loading-container" *ngIf="isLoadingUsers">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+
+        <div *ngIf="!isLoadingUsers && users.length === 0" class="empty-state">
+          <mat-icon>people_outline</mat-icon>
+          <p>No users found</p>
+        </div>
+
+        <div class="table-container" *ngIf="!isLoadingUsers && users.length > 0">
+          <table mat-table [dataSource]="users" class="users-table">
+            <!-- Username Column -->
+            <ng-container matColumnDef="username">
+              <th mat-header-cell *matHeaderCellDef>Username</th>
+              <td mat-cell *matCellDef="let user">
+                <a [routerLink]="['/users', user.id]" class="user-link">
+                  {{'@'}}{{ user.username }}
+                </a>
+              </td>
+            </ng-container>
+
+            <!-- Email Column -->
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef>Email</th>
+              <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+            </ng-container>
+
+            <!-- Display Name Column -->
+            <ng-container matColumnDef="displayName">
+              <th mat-header-cell *matHeaderCellDef>Display Name</th>
+              <td mat-cell *matCellDef="let user">{{ user.displayName }}</td>
+            </ng-container>
+
+            <!-- Role Column -->
+            <ng-container matColumnDef="role">
+              <th mat-header-cell *matHeaderCellDef>Role</th>
+              <td mat-cell *matCellDef="let user">
+                <mat-chip [color]="user.role === 'ADMIN' ? 'primary' : 'accent'" selected>
+                  {{ user.role }}
+                </mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Banned Column -->
+            <ng-container matColumnDef="banned">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let user">
+                <mat-chip *ngIf="user.banned" color="warn" selected>Banned</mat-chip>
+                <mat-chip *ngIf="!user.banned" color="primary" selected>Active</mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Post Count Column -->
+            <ng-container matColumnDef="postCount">
+              <th mat-header-cell *matHeaderCellDef>Posts</th>
+              <td mat-cell *matCellDef="let user">{{ user.postCount }}</td>
+            </ng-container>
+
+            <!-- Created At Column -->
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef>Joined</th>
+              <td mat-cell *matCellDef="let user">{{ user.createdAt | date:'mediumDate' }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let user">
+                <button mat-icon-button [matMenuTriggerFor]="userMenu"
+                        [disabled]="user.role === 'ADMIN'">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #userMenu="matMenu">
+                  <button mat-menu-item *ngIf="!user.banned" (click)="banUser(user)">
+                    <mat-icon color="warn">block</mat-icon>
+                    <span>Ban User</span>
+                  </button>
+                  <button mat-menu-item *ngIf="user.banned" (click)="unbanUser(user)">
+                    <mat-icon color="primary">check_circle</mat-icon>
+                    <span>Unban User</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteUser(user)">
+                    <mat-icon color="warn">delete</mat-icon>
+                    <span>Delete User</span>
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="userDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: userDisplayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Posts Tab -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>article</mat-icon>
+        <span class="tab-label">Posts ({{ posts.length }})</span>
+      </ng-template>
+
+      <div class="tab-content">
+        <div class="loading-container" *ngIf="isLoadingPosts">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+
+        <div *ngIf="!isLoadingPosts && posts.length === 0" class="empty-state">
+          <mat-icon>article</mat-icon>
+          <p>No posts found</p>
+        </div>
+
+        <div class="table-container" *ngIf="!isLoadingPosts && posts.length > 0">
+          <table mat-table [dataSource]="posts" class="posts-table">
+            <!-- Content Column -->
+            <ng-container matColumnDef="content">
+              <th mat-header-cell *matHeaderCellDef>Content</th>
+              <td mat-cell *matCellDef="let post">
+                <div class="post-content">{{ truncateContent(post.content) }}</div>
+              </td>
+            </ng-container>
+
+            <!-- Username Column -->
+            <ng-container matColumnDef="username">
+              <th mat-header-cell *matHeaderCellDef>Author</th>
+              <td mat-cell *matCellDef="let post">
+                <a [routerLink]="['/users', post.userId]" class="user-link">
+                  {{'@'}}{{ post.username }}
+                </a>
+              </td>
+            </ng-container>
+
+            <!-- Likes Column -->
+            <ng-container matColumnDef="likeCount">
+              <th mat-header-cell *matHeaderCellDef>Likes</th>
+              <td mat-cell *matCellDef="let post">
+                <mat-icon class="stat-icon">favorite</mat-icon>
+                {{ post.likeCount }}
+              </td>
+            </ng-container>
+
+            <!-- Comments Column -->
+            <ng-container matColumnDef="commentCount">
+              <th mat-header-cell *matHeaderCellDef>Comments</th>
+              <td mat-cell *matCellDef="let post">
+                <mat-icon class="stat-icon">comment</mat-icon>
+                {{ post.commentCount }}
+              </td>
+            </ng-container>
+
+            <!-- Created At Column -->
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef>Created</th>
+              <td mat-cell *matCellDef="let post">{{ post.createdAt | date:'medium' }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let post">
+                <button mat-icon-button color="warn" (click)="deletePost(post)"
+                        matTooltip="Delete post">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="postDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: postDisplayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Reports Tab -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>flag</mat-icon>
+        <span class="tab-label">Reports ({{ reports.length }})</span>
+        <span class="badge" *ngIf="reports.length > 0">{{ reports.length }}</span>
+      </ng-template>
+
+      <div class="tab-content">
+        <div class="loading-container" *ngIf="isLoadingReports">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+
+        <div *ngIf="!isLoadingReports && reports.length === 0" class="empty-state">
+          <mat-icon>check_circle</mat-icon>
+          <p>No pending reports</p>
+        </div>
+
+        <div class="table-container" *ngIf="!isLoadingReports && reports.length > 0">
+          <table mat-table [dataSource]="reports" class="reports-table">
+            <!-- Reporter Column -->
+            <ng-container matColumnDef="reporterUsername">
+              <th mat-header-cell *matHeaderCellDef>Reporter</th>
+              <td mat-cell *matCellDef="let report">
+                <a [routerLink]="['/users', report.reporterId]" class="user-link">
+                  {{'@'}}{{ report.reporterUsername }}
+                </a>
+              </td>
+            </ng-container>
+
+            <!-- Reported User Column -->
+            <ng-container matColumnDef="reportedUsername">
+              <th mat-header-cell *matHeaderCellDef>Reported User</th>
+              <td mat-cell *matCellDef="let report">
+                <a [routerLink]="['/users', report.reportedUserId]" class="user-link reported">
+                  {{'@'}}{{ report.reportedUsername }}
+                </a>
+              </td>
+            </ng-container>
+
+            <!-- Reason Column -->
+            <ng-container matColumnDef="reason">
+              <th mat-header-cell *matHeaderCellDef>Reason</th>
+              <td mat-cell *matCellDef="let report">
+                <div class="report-reason">{{ report.reason }}</div>
+              </td>
+            </ng-container>
+
+            <!-- Created At Column -->
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef>Reported</th>
+              <td mat-cell *matCellDef="let report">{{ report.createdAt | date:'medium' }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let report">
+                <button mat-icon-button color="primary" (click)="dismissReport(report)"
+                        matTooltip="Dismiss report">
+                  <mat-icon>check</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="reportDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: reportDisplayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
