@@ -8,9 +8,7 @@
   </button>
 
   <!-- Loading State -->
-  <div class="loading-container" *ngIf="isLoading">
-    <mat-spinner diameter="32"></mat-spinner>
-  </div>
+  <app-post-card-skeleton *ngIf="isLoading" [count]="2"></app-post-card-skeleton>
 
   <!-- Posts List -->
   <div class="posts-list" *ngIf="!isLoading">

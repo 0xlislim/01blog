@@ -1,5 +1,10 @@
 .post-card {
   margin-bottom: 16px;
+  transition: box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 
   mat-card-header {
     position: relative;

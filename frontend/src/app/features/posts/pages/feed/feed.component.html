@@ -19,10 +19,7 @@
   </mat-card>
 
   <!-- Loading State -->
-  <div class="loading-container" *ngIf="isLoading">
-    <mat-spinner diameter="40"></mat-spinner>
-    <p>Loading your feed...</p>
-  </div>
+  <app-post-card-skeleton *ngIf="isLoading" [count]="3"></app-post-card-skeleton>
 
   <!-- Posts List -->
   <div class="posts-list" *ngIf="!isLoading">
