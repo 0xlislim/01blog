@@ -65,9 +65,9 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/like")
-    public ResponseEntity<MessageResponse> toggleLike(@PathVariable Long postId, Authentication authentication) {
-        postService.toggleLike(postId, authentication);
-        return ResponseEntity.ok(new MessageResponse("Like toggled successfully"));
+    public ResponseEntity<PostResponse> toggleLike(@PathVariable Long postId, Authentication authentication) {
+        PostResponse post = postService.toggleLike(postId, authentication);
+        return ResponseEntity.ok(post);
     }
 
     @PostMapping("/{postId}/comments")

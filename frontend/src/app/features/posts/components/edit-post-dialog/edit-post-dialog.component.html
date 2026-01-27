@@ -19,11 +19,16 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Media Preview (read-only for edit) -->
-    <div class="media-preview" *ngIf="data.mediaUrl">
-      <p class="media-label">Attached Media:</p>
-      <img *ngIf="data.mediaType === 'IMAGE'" [src]="data.mediaUrl" alt="Post media">
-      <video *ngIf="data.mediaType === 'VIDEO'" [src]="data.mediaUrl" controls></video>
+    <!-- Media Preview -->
+    <div class="media-preview" *ngIf="mediaUrl">
+      <div class="media-header">
+        <p class="media-label">Attached Media:</p>
+        <button mat-icon-button color="warn" type="button" (click)="removeMedia()" matTooltip="Remove media">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <img *ngIf="mediaType === 'IMAGE'" [src]="mediaUrl" alt="Post media">
+      <video *ngIf="mediaType === 'VIDEO'" [src]="mediaUrl" controls></video>
     </div>
   </mat-dialog-content>
 

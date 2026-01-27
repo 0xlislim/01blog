@@ -11,8 +11,11 @@ import com.blog.backend.exception.ForbiddenException;
 import com.blog.backend.exception.PostNotFoundException;
 import com.blog.backend.exception.ReportNotFoundException;
 import com.blog.backend.exception.UserNotFoundException;
+import com.blog.backend.repository.LikeRepository;
+import com.blog.backend.repository.NotificationRepository;
 import com.blog.backend.repository.PostRepository;
 import com.blog.backend.repository.ReportRepository;
+import com.blog.backend.repository.SubscriptionRepository;
 import com.blog.backend.repository.UserRepository;
 import com.blog.backend.security.UserPrincipal;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,6 +49,15 @@ class AdminServiceTest {
 
     @Mock
     private ReportRepository reportRepository;
+
+    @Mock
+    private LikeRepository likeRepository;
+
+    @Mock
+    private NotificationRepository notificationRepository;
+
+    @Mock
+    private SubscriptionRepository subscriptionRepository;
 
     @InjectMocks
     private AdminService adminService;
@@ -113,6 +125,7 @@ class AdminServiceTest {
         // Arrange
         List<User> users = Arrays.asList(user, reportedUser);
         when(userRepository.findAll()).thenReturn(users);
+        when(subscriptionRepository.countBySubscribedToId(anyLong())).thenReturn(0L);
 
         // Act
         List<AdminUserResponse> results = adminService.getAllUsers();
@@ -141,17 +154,17 @@ class AdminServiceTest {
     void getAllUsers_IncludesStats() {
         // Arrange
         user.getPosts().add(post);
-        user.getReportsReceived().add(report);
         List<User> users = Arrays.asList(user);
         when(userRepository.findAll()).thenReturn(users);
+        when(subscriptionRepository.countBySubscribedToId(user.getId())).thenReturn(0L);
 
         // Act
         List<AdminUserResponse> results = adminService.getAllUsers();
 
         // Assert
         assertEquals(1, results.size());
-        assertEquals(1, results.get(0).getPostsCount());
-        assertEquals(1, results.get(0).getReportsReceived());
+        assertEquals(1, results.get(0).getPostCount());
+        assertEquals(0, results.get(0).getSubscriberCount());
     }
 
     // banUser Tests

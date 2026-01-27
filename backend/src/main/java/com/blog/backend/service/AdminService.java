@@ -3,6 +3,7 @@ package com.blog.backend.service;
 import com.blog.backend.dto.admin.AdminUserResponse;
 import com.blog.backend.dto.admin.CreateReportRequest;
 import com.blog.backend.dto.admin.ReportResponse;
+import com.blog.backend.dto.post.PostResponse;
 import com.blog.backend.entity.Post;
 import com.blog.backend.entity.Report;
 import com.blog.backend.entity.User;
@@ -10,8 +11,11 @@ import com.blog.backend.exception.ForbiddenException;
 import com.blog.backend.exception.PostNotFoundException;
 import com.blog.backend.exception.ReportNotFoundException;
 import com.blog.backend.exception.UserNotFoundException;
+import com.blog.backend.repository.LikeRepository;
+import com.blog.backend.repository.NotificationRepository;
 import com.blog.backend.repository.PostRepository;
 import com.blog.backend.repository.ReportRepository;
+import com.blog.backend.repository.SubscriptionRepository;
 import com.blog.backend.repository.UserRepository;
 import com.blog.backend.security.UserPrincipal;
 import org.springframework.security.core.Authentication;
@@ -27,13 +31,22 @@ public class AdminService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final ReportRepository reportRepository;
+    private final LikeRepository likeRepository;
+    private final NotificationRepository notificationRepository;
+    private final SubscriptionRepository subscriptionRepository;
 
     public AdminService(UserRepository userRepository,
                        PostRepository postRepository,
-                       ReportRepository reportRepository) {
+                       ReportRepository reportRepository,
+                       LikeRepository likeRepository,
+                       NotificationRepository notificationRepository,
+                       SubscriptionRepository subscriptionRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.reportRepository = reportRepository;
+        this.likeRepository = likeRepository;
+        this.notificationRepository = notificationRepository;
+        this.subscriptionRepository = subscriptionRepository;
     }
 
     public List<AdminUserResponse> getAllUsers() {
@@ -46,7 +59,7 @@ public class AdminService {
                         user.getRole().name(),
                         user.getBanned(),
                         user.getPosts().size(),
-                        user.getReportsReceived().size(),
+                        subscriptionRepository.countBySubscribedToId(user.getId()).intValue(),
                         user.getCreatedAt()
                 ))
                 .collect(Collectors.toList());
@@ -75,7 +88,30 @@ public class AdminService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
+        // Clear notification FK references to this user before deletion
+        notificationRepository.deleteByRelatedPostUserId(userId);
+        notificationRepository.nullifyRelatedUser(userId);
+
         userRepository.delete(user);
+    }
+
+    public List<PostResponse> getAllPosts() {
+        return postRepository.findAll().stream()
+                .map(post -> new PostResponse(
+                        post.getId(),
+                        post.getContent(),
+                        post.getMediaUrl(),
+                        post.getMediaType(),
+                        post.getUser().getId(),
+                        post.getUser().getUsername(),
+                        post.getUser().getDisplayName(),
+                        post.getLikes().size(),
+                        post.getComments().size(),
+                        false,
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
     }
 
     @Transactional

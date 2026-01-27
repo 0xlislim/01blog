@@ -182,7 +182,7 @@ class PostServiceTest {
         // Assert
         assertNotNull(response);
         assertEquals(1L, response.getId());
-        assertTrue(response.getIsLiked());
+        assertTrue(response.getLikedByCurrentUser());
         verify(postRepository).findById(1L);
     }
 
@@ -197,7 +197,7 @@ class PostServiceTest {
         // Assert
         assertNotNull(response);
         assertEquals(1L, response.getId());
-        assertFalse(response.getIsLiked());
+        assertFalse(response.getLikedByCurrentUser());
         verify(likeRepository, never()).existsByUserIdAndPostId(anyLong(), anyLong());
     }
 

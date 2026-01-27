@@ -4,9 +4,11 @@ export interface Notification {
   message: string;
   read: boolean;
   createdAt: string;
-  actorId?: number;
-  actorUsername?: string;
-  postId?: number;
+  relatedPostId?: number;
+  relatedPostContent?: string;
+  relatedUserId?: number;
+  relatedUsername?: string;
+  relatedUserDisplayName?: string;
 }
 
 export interface NotificationCount {

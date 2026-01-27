@@ -10,15 +10,15 @@ public class AdminUserResponse {
     private String displayName;
     private String role;
     private Boolean banned;
-    private Integer postsCount;
-    private Integer reportsReceived;
+    private Integer postCount;
+    private Integer subscriberCount;
     private LocalDateTime createdAt;
 
     public AdminUserResponse() {
     }
 
     public AdminUserResponse(Long id, String username, String email, String displayName,
-                            String role, Boolean banned, Integer postsCount, Integer reportsReceived,
+                            String role, Boolean banned, Integer postCount, Integer subscriberCount,
                             LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
@@ -26,8 +26,8 @@ public class AdminUserResponse {
         this.displayName = displayName;
         this.role = role;
         this.banned = banned;
-        this.postsCount = postsCount;
-        this.reportsReceived = reportsReceived;
+        this.postCount = postCount;
+        this.subscriberCount = subscriberCount;
         this.createdAt = createdAt;
     }
 
@@ -79,20 +79,20 @@ public class AdminUserResponse {
         this.banned = banned;
     }
 
-    public Integer getPostsCount() {
-        return postsCount;
+    public Integer getPostCount() {
+        return postCount;
     }
 
-    public void setPostsCount(Integer postsCount) {
-        this.postsCount = postsCount;
+    public void setPostCount(Integer postCount) {
+        this.postCount = postCount;
     }
 
-    public Integer getReportsReceived() {
-        return reportsReceived;
+    public Integer getSubscriberCount() {
+        return subscriberCount;
     }
 
-    public void setReportsReceived(Integer reportsReceived) {
-        this.reportsReceived = reportsReceived;
+    public void setSubscriberCount(Integer subscriberCount) {
+        this.subscriberCount = subscriberCount;
     }
 
     public LocalDateTime getCreatedAt() {

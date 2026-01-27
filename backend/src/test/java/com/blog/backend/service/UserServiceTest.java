@@ -102,9 +102,9 @@ class UserServiceTest {
         assertEquals("anotheruser", response.getUsername());
         assertEquals("Another User", response.getDisplayName());
         assertEquals("Another bio", response.getBio());
-        assertEquals(0, response.getPostsCount());
-        assertEquals(0, response.getSubscribersCount());
-        assertEquals(0, response.getSubscriptionsCount());
+        assertEquals(0, response.getPostCount());
+        assertEquals(0, response.getSubscriberCount());
+        assertEquals(0, response.getSubscribedToCount());
         assertFalse(response.getIsSubscribed());
 
         verify(userRepository).findById(2L);

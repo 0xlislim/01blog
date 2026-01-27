@@ -3,6 +3,7 @@ package com.blog.backend.controller;
 import com.blog.backend.dto.admin.AdminUserResponse;
 import com.blog.backend.dto.admin.ReportResponse;
 import com.blog.backend.dto.auth.MessageResponse;
+import com.blog.backend.dto.post.PostResponse;
 import com.blog.backend.service.AdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,6 +45,12 @@ public class AdminController {
     public ResponseEntity<MessageResponse> deleteUser(@PathVariable Long userId) {
         adminService.deleteUser(userId);
         return ResponseEntity.ok(new MessageResponse("User deleted successfully"));
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostResponse>> getAllPosts() {
+        List<PostResponse> posts = adminService.getAllPosts();
+        return ResponseEntity.ok(posts);
     }
 
     @DeleteMapping("/posts/{postId}")

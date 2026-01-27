@@ -148,7 +148,7 @@ public class PostService {
     }
 
     @Transactional
-    public void toggleLike(Long postId, Authentication authentication) {
+    public PostResponse toggleLike(Long postId, Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(postId));
@@ -167,6 +167,11 @@ public class PostService {
             // Create notification for post owner
             notificationService.notifyNewLike(post.getUser(), user, post);
         }
+
+        // Re-fetch to get updated counts
+        Post updatedPost = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException(postId));
+        return mapToPostResponse(updatedPost, principal.getId());
     }
 
     @Transactional

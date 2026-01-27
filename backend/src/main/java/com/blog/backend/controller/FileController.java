@@ -31,10 +31,7 @@ public class FileController {
         String filename = fileStorageService.storeFile(file);
         String mediaType = fileStorageService.getMediaType(file);
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/files/")
-                .path(filename)
-                .toUriString();
+        String fileDownloadUri = "/api/files/" + filename;
 
         Map<String, Object> response = new HashMap<>();
         response.put("filename", filename);

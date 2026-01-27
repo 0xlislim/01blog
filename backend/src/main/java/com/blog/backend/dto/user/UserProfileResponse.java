@@ -8,9 +8,10 @@ public class UserProfileResponse {
     private String username;
     private String displayName;
     private String bio;
-    private Integer postsCount;
-    private Integer subscribersCount;
-    private Integer subscriptionsCount;
+    private String role;
+    private Integer postCount;
+    private Integer subscriberCount;
+    private Integer subscribedToCount;
     private Boolean isSubscribed;
     private LocalDateTime createdAt;
 
@@ -18,15 +19,16 @@ public class UserProfileResponse {
     }
 
     public UserProfileResponse(Long id, String username, String displayName, String bio,
-                              Integer postsCount, Integer subscribersCount, Integer subscriptionsCount,
+                              String role, Integer postCount, Integer subscriberCount, Integer subscribedToCount,
                               Boolean isSubscribed, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.displayName = displayName;
         this.bio = bio;
-        this.postsCount = postsCount;
-        this.subscribersCount = subscribersCount;
-        this.subscriptionsCount = subscriptionsCount;
+        this.role = role;
+        this.postCount = postCount;
+        this.subscriberCount = subscriberCount;
+        this.subscribedToCount = subscribedToCount;
         this.isSubscribed = isSubscribed;
         this.createdAt = createdAt;
     }
@@ -63,28 +65,36 @@ public class UserProfileResponse {
         this.bio = bio;
     }
 
-    public Integer getPostsCount() {
-        return postsCount;
+    public String getRole() {
+        return role;
     }
 
-    public void setPostsCount(Integer postsCount) {
-        this.postsCount = postsCount;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public Integer getSubscribersCount() {
-        return subscribersCount;
+    public Integer getPostCount() {
+        return postCount;
     }
 
-    public void setSubscribersCount(Integer subscribersCount) {
-        this.subscribersCount = subscribersCount;
+    public void setPostCount(Integer postCount) {
+        this.postCount = postCount;
     }
 
-    public Integer getSubscriptionsCount() {
-        return subscriptionsCount;
+    public Integer getSubscriberCount() {
+        return subscriberCount;
     }
 
-    public void setSubscriptionsCount(Integer subscriptionsCount) {
-        this.subscriptionsCount = subscriptionsCount;
+    public void setSubscriberCount(Integer subscriberCount) {
+        this.subscriberCount = subscriberCount;
+    }
+
+    public Integer getSubscribedToCount() {
+        return subscribedToCount;
+    }
+
+    public void setSubscribedToCount(Integer subscribedToCount) {
+        this.subscribedToCount = subscribedToCount;
     }
 
     public Boolean getIsSubscribed() {

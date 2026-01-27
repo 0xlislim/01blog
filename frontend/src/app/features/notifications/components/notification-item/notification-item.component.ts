@@ -50,10 +50,10 @@ export class NotificationItemComponent {
     }
 
     // Navigate based on notification type
-    if (this.notification.postId) {
+    if (this.notification.relatedPostId) {
       this.router.navigate(['/feed']);
-    } else if (this.notification.actorId) {
-      this.router.navigate(['/users', this.notification.actorId]);
+    } else if (this.notification.relatedUserId) {
+      this.router.navigate(['/users', this.notification.relatedUserId]);
     }
   }
 

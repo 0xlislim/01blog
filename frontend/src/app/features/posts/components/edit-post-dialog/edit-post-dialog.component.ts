@@ -15,17 +15,27 @@ export interface EditPostDialogData {
 })
 export class EditPostDialogComponent implements OnInit {
   postForm!: FormGroup;
+  mediaUrl?: string;
+  mediaType?: 'IMAGE' | 'VIDEO';
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditPostDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: EditPostDialogData
-  ) {}
+  ) {
+    this.mediaUrl = data.mediaUrl;
+    this.mediaType = data.mediaType;
+  }
 
   ngOnInit(): void {
     this.postForm = this.fb.group({
       content: [this.data.content, [Validators.required, Validators.maxLength(5000)]]
     });
+  }
+
+  removeMedia(): void {
+    this.mediaUrl = undefined;
+    this.mediaType = undefined;
   }
 
   onSubmit(): void {
@@ -36,8 +46,8 @@ export class EditPostDialogComponent implements OnInit {
 
     this.dialogRef.close({
       content: this.postForm.value.content,
-      mediaUrl: this.data.mediaUrl,
-      mediaType: this.data.mediaType
+      mediaUrl: this.mediaUrl || null,
+      mediaType: this.mediaType || null
     });
   }
 

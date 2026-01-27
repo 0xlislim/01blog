@@ -14,8 +14,8 @@ describe('NotificationService', () => {
     message: 'User posted something new',
     read: false,
     createdAt: '2024-01-01T00:00:00Z',
-    actorId: 2,
-    actorUsername: 'otheruser'
+    relatedUserId: 2,
+    relatedUsername: 'otheruser'
   };
 
   const mockReadNotification: Notification = {

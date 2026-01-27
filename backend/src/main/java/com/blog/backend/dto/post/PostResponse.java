@@ -11,9 +11,9 @@ public class PostResponse {
     private Long userId;
     private String username;
     private String userDisplayName;
-    private Integer likesCount;
-    private Integer commentsCount;
-    private Boolean isLiked;
+    private Integer likeCount;
+    private Integer commentCount;
+    private Boolean likedByCurrentUser;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -22,7 +22,7 @@ public class PostResponse {
 
     public PostResponse(Long id, String content, String mediaUrl, String mediaType,
                        Long userId, String username, String userDisplayName,
-                       Integer likesCount, Integer commentsCount, Boolean isLiked,
+                       Integer likeCount, Integer commentCount, Boolean likedByCurrentUser,
                        LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.content = content;
@@ -31,9 +31,9 @@ public class PostResponse {
         this.userId = userId;
         this.username = username;
         this.userDisplayName = userDisplayName;
-        this.likesCount = likesCount;
-        this.commentsCount = commentsCount;
-        this.isLiked = isLiked;
+        this.likeCount = likeCount;
+        this.commentCount = commentCount;
+        this.likedByCurrentUser = likedByCurrentUser;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -94,28 +94,28 @@ public class PostResponse {
         this.userDisplayName = userDisplayName;
     }
 
-    public Integer getLikesCount() {
-        return likesCount;
+    public Integer getLikeCount() {
+        return likeCount;
     }
 
-    public void setLikesCount(Integer likesCount) {
-        this.likesCount = likesCount;
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
     }
 
-    public Integer getCommentsCount() {
-        return commentsCount;
+    public Integer getCommentCount() {
+        return commentCount;
     }
 
-    public void setCommentsCount(Integer commentsCount) {
-        this.commentsCount = commentsCount;
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 
-    public Boolean getIsLiked() {
-        return isLiked;
+    public Boolean getLikedByCurrentUser() {
+        return likedByCurrentUser;
     }
 
-    public void setIsLiked(Boolean isLiked) {
-        this.isLiked = isLiked;
+    public void setLikedByCurrentUser(Boolean likedByCurrentUser) {
+        this.likedByCurrentUser = likedByCurrentUser;
     }
 
     public LocalDateTime getCreatedAt() {
