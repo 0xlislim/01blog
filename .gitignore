@@ -1,13 +1,3 @@
 # Markdown files
 *.md
 
-# Shell scripts
-*.sh
-*.zsh
-
-# Maven downloaded archive
-apache-maven-*.tar.gz
-
-# Docker installation files
-get-docker-rootless.sh
-install-docker-rootless.zsh
