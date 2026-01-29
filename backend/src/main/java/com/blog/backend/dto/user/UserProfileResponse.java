@@ -8,6 +8,7 @@ public class UserProfileResponse {
     private String username;
     private String displayName;
     private String bio;
+    private String avatarUrl;
     private String role;
     private Integer postCount;
     private Integer subscriberCount;
@@ -18,13 +19,14 @@ public class UserProfileResponse {
     public UserProfileResponse() {
     }
 
-    public UserProfileResponse(Long id, String username, String displayName, String bio,
+    public UserProfileResponse(Long id, String username, String displayName, String bio, String avatarUrl,
                               String role, Integer postCount, Integer subscriberCount, Integer subscribedToCount,
                               Boolean isSubscribed, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.displayName = displayName;
         this.bio = bio;
+        this.avatarUrl = avatarUrl;
         this.role = role;
         this.postCount = postCount;
         this.subscriberCount = subscriberCount;
@@ -63,6 +65,14 @@ public class UserProfileResponse {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getRole() {

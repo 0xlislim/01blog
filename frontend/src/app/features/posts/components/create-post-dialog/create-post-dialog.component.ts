@@ -71,9 +71,8 @@ export class CreatePostDialogComponent implements OnInit {
           .uploadFileWithProgress(this.uploadedFile.file, progressCallback)
           .toPromise();
 
-        this.uploadedMediaUrl = uploadResult?.fileUrl
-          ? this.fileService.getFullMediaUrl(uploadResult.fileUrl)
-          : null;
+        // Store the relative URL - it will be converted to full URL when displaying
+        this.uploadedMediaUrl = uploadResult?.fileUrl || null;
         this.isUploading = false;
       }
 

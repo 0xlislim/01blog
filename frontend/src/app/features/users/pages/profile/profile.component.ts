@@ -6,6 +6,7 @@ import { UserService } from '../../../../core/services/user.service';
 import { SubscriptionService } from '../../../../core/services/subscription.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ReportService } from '../../../../core/services/report.service';
+import { FileService } from '../../../../core/services/file.service';
 import { UserProfile, CreateReportRequest } from '../../../../core/models';
 import { EditProfileDialogComponent } from '../../components/edit-profile-dialog/edit-profile-dialog.component';
 import { ReportDialogComponent } from '../../../../shared/components/report-dialog/report-dialog.component';
@@ -28,9 +29,15 @@ export class ProfileComponent implements OnInit {
     private subscriptionService: SubscriptionService,
     private authService: AuthService,
     private reportService: ReportService,
+    private fileService: FileService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
+
+  getAvatarUrl(): string {
+    if (!this.user?.avatarUrl) return '';
+    return this.fileService.getFullMediaUrl(this.user.avatarUrl);
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -72,10 +79,11 @@ export class ProfileComponent implements OnInit {
     if (!this.user) return;
 
     const dialogRef = this.dialog.open(EditProfileDialogComponent, {
-      width: '400px',
+      width: '450px',
       data: {
         displayName: this.user.displayName,
-        bio: this.user.bio
+        bio: this.user.bio,
+        avatarUrl: this.user.avatarUrl
       }
     });
 

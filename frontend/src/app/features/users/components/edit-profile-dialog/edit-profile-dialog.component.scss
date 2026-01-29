@@ -11,6 +11,61 @@ mat-dialog-content {
   }
 }
 
+.avatar-section {
+  margin-bottom: 16px;
+
+  .section-label {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 0 0 12px 0;
+  }
+
+  .current-avatar {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 12px;
+
+    .avatar-preview {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .remove-avatar-btn {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.upload-progress {
+  margin-top: 12px;
+
+  .progress-text {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-top: 4px;
+  }
+}
+
+.section-divider {
+  margin: 16px 0;
+}
+
 mat-dialog-actions {
   padding: 16px 0 0 0;
+
+  button {
+    mat-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+  }
 }

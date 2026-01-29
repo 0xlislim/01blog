@@ -46,6 +46,7 @@ public class UserService {
                 user.getUsername(),
                 user.getDisplayName(),
                 user.getBio(),
+                user.getAvatarUrl(),
                 user.getRole().name(),
                 user.getPosts().size(),
                 user.getSubscribers().size(),
@@ -72,6 +73,9 @@ public class UserService {
         if (request.getBio() != null) {
             user.setBio(request.getBio());
         }
+        if (request.getAvatarUrl() != null) {
+            user.setAvatarUrl(request.getAvatarUrl());
+        }
 
         User updatedUser = userRepository.save(user);
 
@@ -80,6 +84,7 @@ public class UserService {
                 updatedUser.getUsername(),
                 updatedUser.getDisplayName(),
                 updatedUser.getBio(),
+                updatedUser.getAvatarUrl(),
                 updatedUser.getRole().name(),
                 updatedUser.getPosts().size(),
                 updatedUser.getSubscribers().size(),
@@ -116,6 +121,7 @@ public class UserService {
                             user.getUsername(),
                             user.getDisplayName(),
                             user.getBio(),
+                            user.getAvatarUrl(),
                             user.getRole().name(),
                             user.getPosts().size(),
                             user.getSubscribers().size(),

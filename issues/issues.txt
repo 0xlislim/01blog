@@ -1,0 +1,13 @@
+posts
+
+-when create file.txt and change it to file.png should not be allowed to upload it
+
+search
+
+-read search-issue image
+-should be search in search bar not take me to discover
+
+ui
+
+- all place holders have text over text, when i click tyen one text go up and became good ui
+

@@ -15,6 +15,7 @@ export interface UserProfile {
   username: string;
   displayName: string;
   bio?: string;
+  avatarUrl?: string;
   role: 'USER' | 'ADMIN';
   createdAt: string;
   postCount: number;
@@ -26,6 +27,7 @@ export interface UserProfile {
 export interface UpdateProfileRequest {
   displayName?: string;
   bio?: string;
+  avatarUrl?: string;
 }
 
 export interface AdminUserResponse {

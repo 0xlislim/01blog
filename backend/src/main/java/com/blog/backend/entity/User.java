@@ -46,6 +46,10 @@ public class User {
     @Column(length = 500)
     private String bio;
 
+    @Size(max = 500, message = "Avatar URL must not exceed 500 characters")
+    @Column(length = 500)
+    private String avatarUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.USER;
@@ -131,6 +135,14 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public Role getRole() {

@@ -10,12 +10,16 @@ public class UpdateProfileRequest {
     @Size(max = 500, message = "Bio must not exceed 500 characters")
     private String bio;
 
+    @Size(max = 500, message = "Avatar URL must not exceed 500 characters")
+    private String avatarUrl;
+
     public UpdateProfileRequest() {
     }
 
-    public UpdateProfileRequest(String displayName, String bio) {
+    public UpdateProfileRequest(String displayName, String bio, String avatarUrl) {
         this.displayName = displayName;
         this.bio = bio;
+        this.avatarUrl = avatarUrl;
     }
 
     public String getDisplayName() {
@@ -32,5 +36,13 @@ public class UpdateProfileRequest {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }

@@ -37,6 +37,35 @@ mat-dialog-content {
   }
 }
 
+.file-upload-section {
+  margin-top: 16px;
+
+  .section-label {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 0 0 8px 0;
+  }
+}
+
+.upload-progress {
+  margin-top: 12px;
+
+  .progress-text {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-top: 4px;
+  }
+}
+
 mat-dialog-actions {
   padding-top: 16px;
+
+  button {
+    mat-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+  }
 }
