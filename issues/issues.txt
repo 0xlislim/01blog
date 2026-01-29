@@ -1,6 +1,7 @@
 posts
 
 -when create file.txt and change it to file.png should not be allowed to upload it
+-after the creator of a post change avatar the new avatar don show up in post, still have old avatar
 
 search
 
