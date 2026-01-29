@@ -64,6 +64,9 @@ public class PostService {
 
         Post savedPost = postRepository.save(post);
 
+        // Notify subscribers about the new post
+        notificationService.notifyNewPost(user, savedPost);
+
         return mapToPostResponse(savedPost, principal.getId());
     }
 
@@ -125,6 +128,7 @@ public class PostService {
         final Long finalCurrentUserId = currentUserId;
 
         return user.getPosts().stream()
+                .filter(post -> !post.getHidden() || userId.equals(finalCurrentUserId))
                 .map(post -> mapToPostResponse(post, finalCurrentUserId))
                 .collect(Collectors.toList());
     }
@@ -143,6 +147,7 @@ public class PostService {
         List<Post> posts = postRepository.findByUserIdInOrderByCreatedAtDesc(subscribedUserIds);
 
         return posts.stream()
+                .filter(post -> !post.getHidden() || post.getUser().getId().equals(principal.getId()))
                 .map(post -> mapToPostResponse(post, principal.getId()))
                 .collect(Collectors.toList());
     }
@@ -253,6 +258,7 @@ public class PostService {
                 post.getLikes().size(),
                 post.getComments().size(),
                 isLiked,
+                post.getHidden(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
         );

@@ -20,8 +20,8 @@ export class DashboardComponent implements OnInit {
   isLoadingReports = true;
 
   userDisplayedColumns = ['username', 'email', 'displayName', 'role', 'banned', 'postCount', 'createdAt', 'actions'];
-  postDisplayedColumns = ['content', 'username', 'likeCount', 'commentCount', 'createdAt', 'actions'];
-  reportDisplayedColumns = ['reporterUsername', 'reportedUsername', 'reason', 'createdAt', 'actions'];
+  postDisplayedColumns = ['content', 'username', 'likeCount', 'commentCount', 'hidden', 'createdAt', 'actions'];
+  reportDisplayedColumns = ['reporterUsername', 'type', 'reportedUsername', 'reason', 'createdAt', 'actions'];
 
   constructor(
     private adminService: AdminService,
@@ -146,6 +146,56 @@ export class DashboardComponent implements OnInit {
       error: () => {
         this.isLoadingPosts = false;
         this.snackBar.open('Failed to load posts', 'Close', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
+  }
+
+  hidePost(post: Post): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Hide Post',
+        message: 'Are you sure you want to hide this post? It will not be visible to other users.',
+        confirmText: 'Hide',
+        cancelText: 'Cancel'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.adminService.hidePost(post.id).subscribe({
+          next: () => {
+            post.hidden = true;
+            this.snackBar.open('Post has been hidden', 'Close', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+          },
+          error: () => {
+            this.snackBar.open('Failed to hide post', 'Close', {
+              duration: 5000,
+              panelClass: ['error-snackbar']
+            });
+          }
+        });
+      }
+    });
+  }
+
+  unhidePost(post: Post): void {
+    this.adminService.unhidePost(post.id).subscribe({
+      next: () => {
+        post.hidden = false;
+        this.snackBar.open('Post has been unhidden', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: () => {
+        this.snackBar.open('Failed to unhide post', 'Close', {
           duration: 5000,
           panelClass: ['error-snackbar']
         });

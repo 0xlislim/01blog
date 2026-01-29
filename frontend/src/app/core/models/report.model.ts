@@ -4,11 +4,14 @@ export interface Report {
   createdAt: string;
   reporterId: number;
   reporterUsername: string;
-  reportedUserId: number;
-  reportedUsername: string;
+  reportedUserId?: number;
+  reportedUsername?: string;
+  reportedPostId?: number;
+  reportedPostContent?: string;
 }
 
 export interface CreateReportRequest {
-  reportedUserId: number;
+  reportedUserId?: number;
+  reportedPostId?: number;
   reason: string;
 }

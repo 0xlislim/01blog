@@ -25,11 +25,13 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
+import { TextFieldModule } from '@angular/cdk/text-field';
 
 // Shared Components
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { PostCardSkeletonComponent } from './components/post-card-skeleton/post-card-skeleton.component';
+import { ReportDialogComponent } from './components/report-dialog/report-dialog.component';
 
 const MaterialModules = [
   MatButtonModule,
@@ -59,13 +61,15 @@ const MaterialModules = [
   declarations: [
     ConfirmDialogComponent,
     FileUploadComponent,
-    PostCardSkeletonComponent
+    PostCardSkeletonComponent,
+    ReportDialogComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    TextFieldModule,
     ...MaterialModules
   ],
   exports: [
@@ -73,10 +77,12 @@ const MaterialModules = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    TextFieldModule,
     ...MaterialModules,
     ConfirmDialogComponent,
     FileUploadComponent,
-    PostCardSkeletonComponent
+    PostCardSkeletonComponent,
+    ReportDialogComponent
   ]
 })
 export class SharedModule { }

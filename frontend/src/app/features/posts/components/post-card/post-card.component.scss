@@ -1,9 +1,17 @@
 .post-card {
+  position: relative;
   margin-bottom: 16px;
   transition: box-shadow 0.2s ease-in-out;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-menu-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
   }
 
   mat-card-header {
@@ -56,12 +64,6 @@
         color: rgba(0, 0, 0, 0.5);
       }
     }
-
-    .post-menu-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-    }
   }
 
   mat-card-content {
@@ -89,6 +91,8 @@
 
   mat-card-actions {
     padding: 0 8px;
+    display: flex;
+    align-items: center;
 
     button {
       color: rgba(0, 0, 0, 0.6);
@@ -110,6 +114,18 @@
 
       &:hover {
         background-color: rgba(0, 0, 0, 0.04);
+      }
+
+      &.report-btn {
+        margin-left: auto;
+
+        mat-icon {
+          margin-right: 0;
+        }
+
+        &:hover {
+          color: #f44336;
+        }
       }
     }
   }

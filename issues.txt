@@ -1,18 +1,15 @@
 admin dash
 
--load posts [hide-unhide-delete]
--when user banned should get logout user and user can't login again 
--delete user not working
+-load posts [hide-unhide]
 
 posts
 
 -failed to fetch media in posts
--like not working properly ui
--when upload media check the type of it not just the file extention
--add edit post on post showen on profile too
+-add edit/delete post button on post showen on profile too
 -in edit show media priview to edit too
+- add button report to posts
 
 notifications
 
--need notifications when someone subscribrd to post
+-need notifications when someone create a post
 

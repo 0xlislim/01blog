@@ -5,8 +5,10 @@ import { map, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 export interface FileUploadResponse {
-  url: string;
+  fileUrl: string;
   filename: string;
+  mediaType: string;
+  size: number;
 }
 
 export interface UploadProgress {
@@ -64,6 +66,17 @@ export class FileService {
 
   getFileUrl(filename: string): string {
     return `${this.apiUrl}/${filename}`;
+  }
+
+  getFullMediaUrl(relativeUrl: string): string {
+    if (!relativeUrl) return '';
+    // If it's already an absolute URL, return as is
+    if (relativeUrl.startsWith('http://') || relativeUrl.startsWith('https://')) {
+      return relativeUrl;
+    }
+    // Convert relative URL to absolute URL
+    const baseUrl = environment.apiUrl.replace('/api', '');
+    return `${baseUrl}${relativeUrl}`;
   }
 
   deleteFile(filename: string): Observable<void> {

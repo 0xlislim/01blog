@@ -35,6 +35,9 @@ public class Post {
     @Size(max = 50, message = "Media type must not exceed 50 characters")
     private String mediaType;
 
+    @Column(nullable = false)
+    private Boolean hidden = false;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -134,5 +137,13 @@ public class Post {
 
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
+    }
+
+    public Boolean getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
     }
 }

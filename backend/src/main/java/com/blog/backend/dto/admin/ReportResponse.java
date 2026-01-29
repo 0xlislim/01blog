@@ -10,19 +10,24 @@ public class ReportResponse {
     private String reporterUsername;
     private Long reportedUserId;
     private String reportedUsername;
+    private Long reportedPostId;
+    private String reportedPostContent;
     private LocalDateTime createdAt;
 
     public ReportResponse() {
     }
 
     public ReportResponse(Long id, String reason, Long reporterId, String reporterUsername,
-                         Long reportedUserId, String reportedUsername, LocalDateTime createdAt) {
+                         Long reportedUserId, String reportedUsername, Long reportedPostId,
+                         String reportedPostContent, LocalDateTime createdAt) {
         this.id = id;
         this.reason = reason;
         this.reporterId = reporterId;
         this.reporterUsername = reporterUsername;
         this.reportedUserId = reportedUserId;
         this.reportedUsername = reportedUsername;
+        this.reportedPostId = reportedPostId;
+        this.reportedPostContent = reportedPostContent;
         this.createdAt = createdAt;
     }
 
@@ -80,5 +85,21 @@ public class ReportResponse {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getReportedPostId() {
+        return reportedPostId;
+    }
+
+    public void setReportedPostId(Long reportedPostId) {
+        this.reportedPostId = reportedPostId;
+    }
+
+    public String getReportedPostContent() {
+        return reportedPostContent;
+    }
+
+    public void setReportedPostContent(String reportedPostContent) {
+        this.reportedPostContent = reportedPostContent;
     }
 }

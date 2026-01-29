@@ -14,6 +14,7 @@ public class PostResponse {
     private Integer likeCount;
     private Integer commentCount;
     private Boolean likedByCurrentUser;
+    private Boolean hidden;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -23,7 +24,7 @@ public class PostResponse {
     public PostResponse(Long id, String content, String mediaUrl, String mediaType,
                        Long userId, String username, String userDisplayName,
                        Integer likeCount, Integer commentCount, Boolean likedByCurrentUser,
-                       LocalDateTime createdAt, LocalDateTime updatedAt) {
+                       Boolean hidden, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.content = content;
         this.mediaUrl = mediaUrl;
@@ -34,6 +35,7 @@ public class PostResponse {
         this.likeCount = likeCount;
         this.commentCount = commentCount;
         this.likedByCurrentUser = likedByCurrentUser;
+        this.hidden = hidden;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -116,6 +118,14 @@ public class PostResponse {
 
     public void setLikedByCurrentUser(Boolean likedByCurrentUser) {
         this.likedByCurrentUser = likedByCurrentUser;
+    }
+
+    public Boolean getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
     }
 
     public LocalDateTime getCreatedAt() {

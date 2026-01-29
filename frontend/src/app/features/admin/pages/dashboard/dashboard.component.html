@@ -164,6 +164,15 @@
               </td>
             </ng-container>
 
+            <!-- Hidden Column -->
+            <ng-container matColumnDef="hidden">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let post">
+                <mat-chip *ngIf="post.hidden" color="warn" selected>Hidden</mat-chip>
+                <mat-chip *ngIf="!post.hidden" color="primary" selected>Visible</mat-chip>
+              </td>
+            </ng-container>
+
             <!-- Created At Column -->
             <ng-container matColumnDef="createdAt">
               <th mat-header-cell *matHeaderCellDef>Created</th>
@@ -174,10 +183,23 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>Actions</th>
               <td mat-cell *matCellDef="let post">
-                <button mat-icon-button color="warn" (click)="deletePost(post)"
-                        matTooltip="Delete post">
-                  <mat-icon>delete</mat-icon>
+                <button mat-icon-button [matMenuTriggerFor]="postMenu">
+                  <mat-icon>more_vert</mat-icon>
                 </button>
+                <mat-menu #postMenu="matMenu">
+                  <button mat-menu-item *ngIf="!post.hidden" (click)="hidePost(post)">
+                    <mat-icon>visibility_off</mat-icon>
+                    <span>Hide Post</span>
+                  </button>
+                  <button mat-menu-item *ngIf="post.hidden" (click)="unhidePost(post)">
+                    <mat-icon color="primary">visibility</mat-icon>
+                    <span>Unhide Post</span>
+                  </button>
+                  <button mat-menu-item (click)="deletePost(post)">
+                    <mat-icon color="warn">delete</mat-icon>
+                    <span>Delete Post</span>
+                  </button>
+                </mat-menu>
               </td>
             </ng-container>
 
@@ -218,13 +240,26 @@
               </td>
             </ng-container>
 
-            <!-- Reported User Column -->
-            <ng-container matColumnDef="reportedUsername">
-              <th mat-header-cell *matHeaderCellDef>Reported User</th>
+            <!-- Type Column -->
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
               <td mat-cell *matCellDef="let report">
-                <a [routerLink]="['/users', report.reportedUserId]" class="user-link reported">
+                <mat-chip *ngIf="report.reportedPostId" color="accent" selected>Post</mat-chip>
+                <mat-chip *ngIf="report.reportedUserId && !report.reportedPostId" color="primary" selected>User</mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Reported Content Column -->
+            <ng-container matColumnDef="reportedUsername">
+              <th mat-header-cell *matHeaderCellDef>Reported</th>
+              <td mat-cell *matCellDef="let report">
+                <a *ngIf="report.reportedUserId && !report.reportedPostId"
+                   [routerLink]="['/users', report.reportedUserId]" class="user-link reported">
                   {{'@'}}{{ report.reportedUsername }}
                 </a>
+                <div *ngIf="report.reportedPostId" class="post-content-preview">
+                  {{ report.reportedPostContent || 'Post content' }}
+                </div>
               </td>
             </ng-container>
 

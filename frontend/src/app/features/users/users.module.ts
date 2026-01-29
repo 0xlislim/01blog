@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
-import { TextFieldModule } from '@angular/cdk/text-field';
 import { PostsModule } from '../posts/posts.module';
 
 import { ProfileComponent } from './pages/profile/profile.component';
 import { UserSearchComponent } from './pages/user-search/user-search.component';
 import { EditProfileDialogComponent } from './components/edit-profile-dialog/edit-profile-dialog.component';
-import { ReportDialogComponent } from './components/report-dialog/report-dialog.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'profile', pathMatch: 'full' },
@@ -20,12 +18,10 @@ const routes: Routes = [
   declarations: [
     ProfileComponent,
     UserSearchComponent,
-    EditProfileDialogComponent,
-    ReportDialogComponent
+    EditProfileDialogComponent
   ],
   imports: [
     SharedModule,
-    TextFieldModule,
     PostsModule,
     RouterModule.forChild(routes)
   ]

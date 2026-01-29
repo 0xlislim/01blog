@@ -11,6 +11,7 @@ export interface Post {
   likeCount: number;
   commentCount: number;
   likedByCurrentUser: boolean;
+  hidden?: boolean;
 }
 
 export interface PostRequest {

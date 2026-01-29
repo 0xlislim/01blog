@@ -6,8 +6,9 @@ import jakarta.validation.constraints.Size;
 
 public class CreateReportRequest {
 
-    @NotNull(message = "Reported user ID is required")
     private Long reportedUserId;
+
+    private Long reportedPostId;
 
     @NotBlank(message = "Reason is required")
     @Size(max = 1000, message = "Reason must not exceed 1000 characters")
@@ -16,8 +17,9 @@ public class CreateReportRequest {
     public CreateReportRequest() {
     }
 
-    public CreateReportRequest(Long reportedUserId, String reason) {
+    public CreateReportRequest(Long reportedUserId, Long reportedPostId, String reason) {
         this.reportedUserId = reportedUserId;
+        this.reportedPostId = reportedPostId;
         this.reason = reason;
     }
 
@@ -27,6 +29,14 @@ public class CreateReportRequest {
 
     public void setReportedUserId(Long reportedUserId) {
         this.reportedUserId = reportedUserId;
+    }
+
+    public Long getReportedPostId() {
+        return reportedPostId;
+    }
+
+    public void setReportedPostId(Long reportedPostId) {
+        this.reportedPostId = reportedPostId;
     }
 
     public String getReason() {

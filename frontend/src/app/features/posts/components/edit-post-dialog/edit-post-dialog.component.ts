@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FileService } from '../../../../core/services/file.service';
 
 export interface EditPostDialogData {
   content: string;
@@ -21,10 +22,16 @@ export class EditPostDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditPostDialogComponent>,
+    private fileService: FileService,
     @Inject(MAT_DIALOG_DATA) public data: EditPostDialogData
   ) {
     this.mediaUrl = data.mediaUrl;
     this.mediaType = data.mediaType;
+  }
+
+  getMediaUrl(): string {
+    if (!this.mediaUrl) return '';
+    return this.fileService.getFullMediaUrl(this.mediaUrl);
   }
 
   ngOnInit(): void {

@@ -108,10 +108,29 @@ public class AdminService {
                         post.getLikes().size(),
                         post.getComments().size(),
                         false,
+                        post.getHidden(),
                         post.getCreatedAt(),
                         post.getUpdatedAt()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void hidePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException(postId));
+
+        post.setHidden(true);
+        postRepository.save(post);
+    }
+
+    @Transactional
+    public void unhidePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException(postId));
+
+        post.setHidden(false);
+        postRepository.save(post);
     }
 
     @Transactional
@@ -129,8 +148,10 @@ public class AdminService {
                         report.getReason(),
                         report.getReporter().getId(),
                         report.getReporter().getUsername(),
-                        report.getReportedUser().getId(),
-                        report.getReportedUser().getUsername(),
+                        report.getReportedUser() != null ? report.getReportedUser().getId() : null,
+                        report.getReportedUser() != null ? report.getReportedUser().getUsername() : null,
+                        report.getReportedPost() != null ? report.getReportedPost().getId() : null,
+                        report.getReportedPost() != null ? truncateContent(report.getReportedPost().getContent(), 100) : null,
                         report.getCreatedAt()
                 ))
                 .collect(Collectors.toList());
@@ -143,17 +164,32 @@ public class AdminService {
         User reporter = userRepository.findById(principal.getId())
                 .orElseThrow(() -> new UserNotFoundException(principal.getId()));
 
-        User reportedUser = userRepository.findById(request.getReportedUserId())
-                .orElseThrow(() -> new UserNotFoundException(request.getReportedUserId()));
-
-        if (reporter.getId().equals(reportedUser.getId())) {
-            throw new ForbiddenException("You cannot report yourself");
-        }
-
         Report report = new Report();
         report.setReason(request.getReason());
         report.setReporter(reporter);
-        report.setReportedUser(reportedUser);
+
+        User reportedUser = null;
+        Post reportedPost = null;
+
+        if (request.getReportedPostId() != null) {
+            reportedPost = postRepository.findById(request.getReportedPostId())
+                    .orElseThrow(() -> new PostNotFoundException(request.getReportedPostId()));
+            report.setReportedPost(reportedPost);
+
+            if (reporter.getId().equals(reportedPost.getUser().getId())) {
+                throw new ForbiddenException("You cannot report your own post");
+            }
+        } else if (request.getReportedUserId() != null) {
+            reportedUser = userRepository.findById(request.getReportedUserId())
+                    .orElseThrow(() -> new UserNotFoundException(request.getReportedUserId()));
+            report.setReportedUser(reportedUser);
+
+            if (reporter.getId().equals(reportedUser.getId())) {
+                throw new ForbiddenException("You cannot report yourself");
+            }
+        } else {
+            throw new IllegalArgumentException("Either reportedUserId or reportedPostId must be provided");
+        }
 
         Report savedReport = reportRepository.save(report);
 
@@ -162,10 +198,19 @@ public class AdminService {
                 savedReport.getReason(),
                 reporter.getId(),
                 reporter.getUsername(),
-                reportedUser.getId(),
-                reportedUser.getUsername(),
+                reportedUser != null ? reportedUser.getId() : null,
+                reportedUser != null ? reportedUser.getUsername() : null,
+                reportedPost != null ? reportedPost.getId() : null,
+                reportedPost != null ? truncateContent(reportedPost.getContent(), 100) : null,
                 savedReport.getCreatedAt()
         );
+    }
+
+    private String truncateContent(String content, int maxLength) {
+        if (content == null || content.length() <= maxLength) {
+            return content;
+        }
+        return content.substring(0, maxLength) + "...";
     }
 
     @Transactional

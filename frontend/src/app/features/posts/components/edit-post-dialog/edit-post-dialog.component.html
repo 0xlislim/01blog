@@ -27,8 +27,8 @@
           <mat-icon>close</mat-icon>
         </button>
       </div>
-      <img *ngIf="mediaType === 'IMAGE'" [src]="mediaUrl" alt="Post media">
-      <video *ngIf="mediaType === 'VIDEO'" [src]="mediaUrl" controls></video>
+      <img *ngIf="mediaType === 'IMAGE'" [src]="getMediaUrl()" alt="Post media">
+      <video *ngIf="mediaType === 'VIDEO'" [src]="getMediaUrl()" controls></video>
     </div>
   </mat-dialog-content>
 

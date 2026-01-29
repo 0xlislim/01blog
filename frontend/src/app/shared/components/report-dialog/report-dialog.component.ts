@@ -3,8 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface ReportDialogData {
-  userId: number;
-  username: string;
+  userId?: number;
+  username?: string;
+  postId?: number;
+  postContent?: string;
 }
 
 @Component({
@@ -32,16 +34,34 @@ export class ReportDialogComponent implements OnInit {
     });
   }
 
+  get isPostReport(): boolean {
+    return !!this.data.postId;
+  }
+
+  get truncatedPostContent(): string {
+    if (!this.data.postContent) return '';
+    return this.data.postContent.length > 100
+      ? this.data.postContent.substring(0, 100) + '...'
+      : this.data.postContent;
+  }
+
   onSubmit(): void {
     if (this.reportForm.invalid) {
       this.reportForm.markAllAsTouched();
       return;
     }
 
-    this.dialogRef.close({
-      reportedUserId: this.data.userId,
+    const result: any = {
       reason: this.reportForm.get('reason')?.value.trim()
-    });
+    };
+
+    if (this.data.postId) {
+      result.reportedPostId = this.data.postId;
+    } else if (this.data.userId) {
+      result.reportedUserId = this.data.userId;
+    }
+
+    this.dialogRef.close(result);
   }
 
   onCancel(): void {

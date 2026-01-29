@@ -34,6 +34,14 @@ export class AdminService {
     return this.http.get<Post[]>(`${this.apiUrl}/posts`);
   }
 
+  hidePost(postId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/posts/${postId}/hide`, {});
+  }
+
+  unhidePost(postId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/posts/${postId}/unhide`, {});
+  }
+
   deletePost(postId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/posts/${postId}`);
   }

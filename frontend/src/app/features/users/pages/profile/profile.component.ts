@@ -8,7 +8,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { ReportService } from '../../../../core/services/report.service';
 import { UserProfile, CreateReportRequest } from '../../../../core/models';
 import { EditProfileDialogComponent } from '../../components/edit-profile-dialog/edit-profile-dialog.component';
-import { ReportDialogComponent } from '../../components/report-dialog/report-dialog.component';
+import { ReportDialogComponent } from '../../../../shared/components/report-dialog/report-dialog.component';
 
 @Component({
   selector: 'app-profile',

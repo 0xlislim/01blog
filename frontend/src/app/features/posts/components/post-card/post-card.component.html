@@ -1,4 +1,19 @@
 <mat-card class="post-card">
+  <!-- Post Menu (own posts only) -->
+  <button mat-icon-button [matMenuTriggerFor]="postMenu" class="post-menu-btn" *ngIf="isOwnPost">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #postMenu="matMenu">
+    <button mat-menu-item (click)="editPost()">
+      <mat-icon>edit</mat-icon>
+      <span>Edit</span>
+    </button>
+    <button mat-menu-item (click)="deletePost()">
+      <mat-icon color="warn">delete</mat-icon>
+      <span>Delete</span>
+    </button>
+  </mat-menu>
+
   <!-- Post Header -->
   <mat-card-header *ngIf="showAuthor">
     <div mat-card-avatar class="post-avatar" (click)="viewAuthorProfile()">
@@ -12,21 +27,6 @@
       <span class="dot">·</span>
       <span class="date">{{ post.createdAt | date:'MMM d, y, h:mm a' }}</span>
     </mat-card-subtitle>
-
-    <!-- Post Menu (own posts only) -->
-    <button mat-icon-button [matMenuTriggerFor]="postMenu" class="post-menu-btn" *ngIf="isOwnPost">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #postMenu="matMenu">
-      <button mat-menu-item (click)="editPost()">
-        <mat-icon>edit</mat-icon>
-        <span>Edit</span>
-      </button>
-      <button mat-menu-item (click)="deletePost()">
-        <mat-icon color="warn">delete</mat-icon>
-        <span>Delete</span>
-      </button>
-    </mat-menu>
   </mat-card-header>
 
   <!-- Post Content -->
@@ -36,11 +36,11 @@
     <!-- Media Content -->
     <div class="media-container" *ngIf="post.mediaUrl">
       <img *ngIf="post.mediaType === 'IMAGE'"
-           [src]="post.mediaUrl"
+           [src]="getMediaUrl()"
            alt="Post image"
            class="post-media">
       <video *ngIf="post.mediaType === 'VIDEO'"
-             [src]="post.mediaUrl"
+             [src]="getMediaUrl()"
              controls
              class="post-media">
       </video>
@@ -57,6 +57,10 @@
     <button mat-button (click)="toggleComments()">
       <mat-icon>{{ showComments ? 'chat' : 'chat_bubble_outline' }}</mat-icon>
       <span>{{ post.commentCount }}</span>
+    </button>
+
+    <button mat-button (click)="reportPost()" *ngIf="!isOwnPost" class="report-btn" matTooltip="Report post">
+      <mat-icon>flag</mat-icon>
     </button>
   </mat-card-actions>
 

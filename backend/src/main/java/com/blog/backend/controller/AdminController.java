@@ -53,6 +53,18 @@ public class AdminController {
         return ResponseEntity.ok(posts);
     }
 
+    @PostMapping("/posts/{postId}/hide")
+    public ResponseEntity<MessageResponse> hidePost(@PathVariable Long postId) {
+        adminService.hidePost(postId);
+        return ResponseEntity.ok(new MessageResponse("Post hidden successfully"));
+    }
+
+    @PostMapping("/posts/{postId}/unhide")
+    public ResponseEntity<MessageResponse> unhidePost(@PathVariable Long postId) {
+        adminService.unhidePost(postId);
+        return ResponseEntity.ok(new MessageResponse("Post unhidden successfully"));
+    }
+
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<MessageResponse> deletePost(@PathVariable Long postId) {
         adminService.deletePost(postId);

@@ -34,8 +34,12 @@ public class Report {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reported_user_id", nullable = false)
+    @JoinColumn(name = "reported_user_id")
     private User reportedUser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reported_post_id")
+    private Post reportedPost;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reporter_id", nullable = false)
@@ -88,5 +92,13 @@ public class Report {
 
     public void setReporter(User reporter) {
         this.reporter = reporter;
+    }
+
+    public Post getReportedPost() {
+        return reportedPost;
+    }
+
+    public void setReportedPost(Post reportedPost) {
+        this.reportedPost = reportedPost;
     }
 }

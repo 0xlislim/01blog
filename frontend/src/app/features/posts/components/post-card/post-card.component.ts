@@ -2,11 +2,14 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Post } from '../../../../core/models';
+import { Post, CreateReportRequest } from '../../../../core/models';
 import { PostService } from '../../../../core/services/post.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { FileService } from '../../../../core/services/file.service';
+import { ReportService } from '../../../../core/services/report.service';
 import { EditPostDialogComponent } from '../edit-post-dialog/edit-post-dialog.component';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ReportDialogComponent } from '../../../../shared/components/report-dialog/report-dialog.component';
 
 @Component({
   selector: 'app-post-card',
@@ -25,10 +28,17 @@ export class PostCardComponent {
   constructor(
     private postService: PostService,
     private authService: AuthService,
+    private fileService: FileService,
+    private reportService: ReportService,
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
+
+  getMediaUrl(): string {
+    if (!this.post.mediaUrl) return '';
+    return this.fileService.getFullMediaUrl(this.post.mediaUrl);
+  }
 
   get isOwnPost(): boolean {
     return this.post.userId === this.authService.getCurrentUserId();
@@ -126,6 +136,37 @@ export class PostCardComponent {
           },
           error: () => {
             this.snackBar.open('Failed to delete post', 'Close', {
+              duration: 5000,
+              panelClass: ['error-snackbar']
+            });
+          }
+        });
+      }
+    });
+  }
+
+  reportPost(): void {
+    if (this.isOwnPost) return;
+
+    const dialogRef = this.dialog.open(ReportDialogComponent, {
+      width: '450px',
+      data: {
+        postId: this.post.id,
+        postContent: this.post.content
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: CreateReportRequest | undefined) => {
+      if (result) {
+        this.reportService.createReport(result).subscribe({
+          next: () => {
+            this.snackBar.open('Report submitted successfully', 'Close', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+          },
+          error: () => {
+            this.snackBar.open('Failed to submit report', 'Close', {
               duration: 5000,
               panelClass: ['error-snackbar']
             });

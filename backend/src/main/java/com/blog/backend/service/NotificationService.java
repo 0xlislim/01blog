@@ -3,10 +3,12 @@ package com.blog.backend.service;
 import com.blog.backend.dto.notification.NotificationResponse;
 import com.blog.backend.entity.Notification;
 import com.blog.backend.entity.Post;
+import com.blog.backend.entity.Subscription;
 import com.blog.backend.entity.User;
 import com.blog.backend.exception.ForbiddenException;
 import com.blog.backend.exception.NotificationNotFoundException;
 import com.blog.backend.repository.NotificationRepository;
+import com.blog.backend.repository.SubscriptionRepository;
 import com.blog.backend.repository.UserRepository;
 import com.blog.backend.security.UserPrincipal;
 import org.springframework.security.core.Authentication;
@@ -21,10 +23,14 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+    private final SubscriptionRepository subscriptionRepository;
 
-    public NotificationService(NotificationRepository notificationRepository, UserRepository userRepository) {
+    public NotificationService(NotificationRepository notificationRepository,
+                               UserRepository userRepository,
+                               SubscriptionRepository subscriptionRepository) {
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
+        this.subscriptionRepository = subscriptionRepository;
     }
 
     public List<NotificationResponse> getUserNotifications(Authentication authentication) {
@@ -140,6 +146,18 @@ public class NotificationService {
 
         String message = commenter.getUsername() + " commented on your post";
         createNotification(postOwner, message, "NEW_COMMENT", post, commenter);
+    }
+
+    // Helper method to create notifications for new post (to all subscribers)
+    @Transactional
+    public void notifyNewPost(User postAuthor, Post post) {
+        List<Subscription> subscriptions = subscriptionRepository.findBySubscribedToId(postAuthor.getId());
+
+        for (Subscription subscription : subscriptions) {
+            User subscriber = subscription.getSubscriber();
+            String message = postAuthor.getUsername() + " published a new post";
+            createNotification(subscriber, message, "NEW_POST", post, postAuthor);
+        }
     }
 
     private NotificationResponse mapToNotificationResponse(Notification notification) {
