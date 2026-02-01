@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -111,9 +112,89 @@ public class FileStorageService {
             throw new InvalidFileException("File type not allowed. Supported types: images (jpeg, png, gif, webp) and videos (mp4, webm, mov)");
         }
 
+        // Validate actual file content using magic bytes
+        String detectedType = detectFileTypeFromContent(file);
+        if (detectedType == null) {
+            throw new InvalidFileException("Could not verify file type from content. The file may be corrupted or have an incorrect extension.");
+        }
+
+        // Ensure the detected type matches the claimed content type category
+        boolean claimedImage = isImageType(contentType);
+        boolean detectedImage = isImageType(detectedType);
+        boolean claimedVideo = isVideoType(contentType);
+        boolean detectedVideo = isVideoType(detectedType);
+
+        if ((claimedImage && !detectedImage) || (claimedVideo && !detectedVideo)) {
+            throw new InvalidFileException("File content does not match the declared file type. Please upload a valid " +
+                (claimedImage ? "image" : "video") + " file.");
+        }
+
         String originalFilename = file.getOriginalFilename();
         if (originalFilename != null && originalFilename.contains("..")) {
             throw new InvalidFileException("Invalid filename: " + originalFilename);
+        }
+    }
+
+    private String detectFileTypeFromContent(MultipartFile file) {
+        try (InputStream is = file.getInputStream()) {
+            byte[] header = new byte[12];
+            int bytesRead = is.read(header);
+            if (bytesRead < 4) {
+                return null;
+            }
+
+            // JPEG: FF D8 FF
+            if (header[0] == (byte) 0xFF && header[1] == (byte) 0xD8 && header[2] == (byte) 0xFF) {
+                return "image/jpeg";
+            }
+
+            // PNG: 89 50 4E 47 0D 0A 1A 0A
+            if (header[0] == (byte) 0x89 && header[1] == (byte) 0x50 &&
+                header[2] == (byte) 0x4E && header[3] == (byte) 0x47) {
+                return "image/png";
+            }
+
+            // GIF: 47 49 46 38
+            if (header[0] == (byte) 0x47 && header[1] == (byte) 0x49 &&
+                header[2] == (byte) 0x46 && header[3] == (byte) 0x38) {
+                return "image/gif";
+            }
+
+            // WebP: 52 49 46 46 ... 57 45 42 50
+            if (header[0] == (byte) 0x52 && header[1] == (byte) 0x49 &&
+                header[2] == (byte) 0x46 && header[3] == (byte) 0x46 &&
+                bytesRead >= 12 &&
+                header[8] == (byte) 0x57 && header[9] == (byte) 0x45 &&
+                header[10] == (byte) 0x42 && header[11] == (byte) 0x50) {
+                return "image/webp";
+            }
+
+            // MP4: ftyp at bytes 4-7
+            if (bytesRead >= 8 &&
+                header[4] == (byte) 0x66 && header[5] == (byte) 0x74 &&
+                header[6] == (byte) 0x79 && header[7] == (byte) 0x70) {
+                return "video/mp4";
+            }
+
+            // WebM: 1A 45 DF A3
+            if (header[0] == (byte) 0x1A && header[1] == (byte) 0x45 &&
+                header[2] == (byte) 0xDF && header[3] == (byte) 0xA3) {
+                return "video/webm";
+            }
+
+            // QuickTime/MOV: also uses ftyp but with 'qt' brand
+            // MOV files can also start with 'moov', 'mdat', 'wide', 'free', 'skip'
+            if (bytesRead >= 8) {
+                String fourCC = new String(new byte[]{header[4], header[5], header[6], header[7]});
+                if (fourCC.equals("moov") || fourCC.equals("mdat") || fourCC.equals("wide") ||
+                    fourCC.equals("free") || fourCC.equals("skip")) {
+                    return "video/quicktime";
+                }
+            }
+
+            return null;
+        } catch (IOException e) {
+            return null;
         }
     }
 

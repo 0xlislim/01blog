@@ -25,6 +25,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TextFieldModule } from '@angular/cdk/text-field';
 
 // Shared Components
@@ -54,7 +55,8 @@ const MaterialModules = [
   MatSortModule,
   MatChipsModule,
   MatTooltipModule,
-  MatDividerModule
+  MatDividerModule,
+  MatAutocompleteModule
 ];
 
 @NgModule({

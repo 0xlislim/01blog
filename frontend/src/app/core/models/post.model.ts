@@ -8,6 +8,7 @@ export interface Post {
   userId: number;
   username: string;
   userDisplayName: string;
+  userAvatarUrl?: string;
   likeCount: number;
   commentCount: number;
   likedByCurrentUser: boolean;

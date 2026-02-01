@@ -1,10 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable, Subject, interval } from 'rxjs';
-import { map, shareReplay, takeUntil } from 'rxjs/operators';
+import { Observable, Subject, interval, of } from 'rxjs';
+import { map, shareReplay, takeUntil, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { UserService } from '../../../core/services/user.service';
+import { FileService } from '../../../core/services/file.service';
+import { UserProfile } from '../../../core/models';
 import { Router } from '@angular/router';
 
 @Component({
@@ -21,6 +25,10 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   currentUser$ = this.authService.currentUser$;
   unreadCount$ = this.notificationService.unreadCount$;
 
+  searchControl = new FormControl('');
+  searchResults: UserProfile[] = [];
+  isSearching = false;
+
   navItems = [
     { icon: 'home', label: 'Feed', route: '/feed' },
     { icon: 'person', label: 'My Profile', route: '/users/profile' },
@@ -36,6 +44,8 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
     private notificationService: NotificationService,
+    private userService: UserService,
+    private fileService: FileService,
     private router: Router
   ) {
     this.isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -55,6 +65,30 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.notificationService.refreshUnreadCount();
       });
+
+    // Setup search autocomplete
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$),
+      switchMap(query => {
+        if (!query || query.trim().length < 2) {
+          this.searchResults = [];
+          return of([]);
+        }
+        this.isSearching = true;
+        return this.userService.searchUsers(query.trim());
+      })
+    ).subscribe({
+      next: (users) => {
+        this.searchResults = users.slice(0, 5);
+        this.isSearching = false;
+      },
+      error: () => {
+        this.searchResults = [];
+        this.isSearching = false;
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -77,5 +111,30 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
         this.sidenav.close();
       }
     });
+  }
+
+  selectUser(user: UserProfile): void {
+    this.searchControl.setValue('');
+    this.searchResults = [];
+    this.router.navigate(['/users', user.id]);
+  }
+
+  getAvatarUrl(avatarUrl: string | undefined): string {
+    if (!avatarUrl) return '';
+    return this.fileService.getFullMediaUrl(avatarUrl);
+  }
+
+  onSearchEnter(): void {
+    const query = this.searchControl.value?.trim();
+    if (query && query.length >= 2) {
+      this.router.navigate(['/users/search'], { queryParams: { q: query } });
+      this.searchControl.setValue('');
+      this.searchResults = [];
+    }
+  }
+
+  clearSearch(): void {
+    this.searchControl.setValue('');
+    this.searchResults = [];
   }
 }

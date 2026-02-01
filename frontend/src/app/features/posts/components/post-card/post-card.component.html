@@ -17,7 +17,8 @@
   <!-- Post Header -->
   <mat-card-header *ngIf="showAuthor">
     <div mat-card-avatar class="post-avatar" (click)="viewAuthorProfile()">
-      <mat-icon>account_circle</mat-icon>
+      <img *ngIf="post.userAvatarUrl" [src]="getAvatarUrl()" alt="Avatar" class="avatar-img">
+      <mat-icon *ngIf="!post.userAvatarUrl">account_circle</mat-icon>
     </div>
     <mat-card-title class="author-name" (click)="viewAuthorProfile()">
       {{ post.userDisplayName }}

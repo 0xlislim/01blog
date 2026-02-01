@@ -100,14 +100,14 @@
     padding: 4px 12px;
     max-width: 400px;
     width: 100%;
-    cursor: pointer;
     transition: background-color 0.2s;
+    position: relative;
 
-    &:hover {
+    &:hover, &:focus-within {
       background-color: rgba(255, 255, 255, 0.25);
     }
 
-    mat-icon {
+    > mat-icon:first-child {
       color: rgba(255, 255, 255, 0.7);
       margin-right: 8px;
     }
@@ -119,10 +119,22 @@
       color: white;
       font-size: 14px;
       width: 100%;
-      cursor: pointer;
 
       &::placeholder {
         color: rgba(255, 255, 255, 0.7);
+      }
+    }
+
+    .clear-btn {
+      color: rgba(255, 255, 255, 0.7);
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
       }
     }
   }

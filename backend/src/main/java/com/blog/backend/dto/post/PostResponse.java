@@ -11,6 +11,7 @@ public class PostResponse {
     private Long userId;
     private String username;
     private String userDisplayName;
+    private String userAvatarUrl;
     private Integer likeCount;
     private Integer commentCount;
     private Boolean likedByCurrentUser;
@@ -22,7 +23,7 @@ public class PostResponse {
     }
 
     public PostResponse(Long id, String content, String mediaUrl, String mediaType,
-                       Long userId, String username, String userDisplayName,
+                       Long userId, String username, String userDisplayName, String userAvatarUrl,
                        Integer likeCount, Integer commentCount, Boolean likedByCurrentUser,
                        Boolean hidden, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
@@ -32,6 +33,7 @@ public class PostResponse {
         this.userId = userId;
         this.username = username;
         this.userDisplayName = userDisplayName;
+        this.userAvatarUrl = userAvatarUrl;
         this.likeCount = likeCount;
         this.commentCount = commentCount;
         this.likedByCurrentUser = likedByCurrentUser;
@@ -94,6 +96,14 @@ public class PostResponse {
 
     public void setUserDisplayName(String userDisplayName) {
         this.userDisplayName = userDisplayName;
+    }
+
+    public String getUserAvatarUrl() {
+        return userAvatarUrl;
+    }
+
+    public void setUserAvatarUrl(String userAvatarUrl) {
+        this.userAvatarUrl = userAvatarUrl;
     }
 
     public Integer getLikeCount() {

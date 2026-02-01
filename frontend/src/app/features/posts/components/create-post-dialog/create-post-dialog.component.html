@@ -3,9 +3,8 @@
 <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
   <mat-dialog-content>
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>What's on your mind?</mat-label>
+      <mat-label>Share your thoughts, discoveries, or learning experiences</mat-label>
       <textarea matInput formControlName="content"
-                placeholder="Share your thoughts, discoveries, or learning experiences..."
                 rows="5"
                 cdkTextareaAutosize
                 cdkAutosizeMinRows="3"

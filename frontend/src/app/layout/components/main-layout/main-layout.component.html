@@ -72,10 +72,35 @@
       <!-- Search Bar (Desktop) -->
       <div class="search-container" *ngIf="(isHandset$ | async) === false">
         <mat-icon>search</mat-icon>
-        <input type="text" placeholder="Search users..."
-               [routerLink]="['/users/search']"
-               readonly
+        <input type="text"
+               placeholder="Search users..."
+               [formControl]="searchControl"
+               [matAutocomplete]="searchAuto"
+               (keydown.enter)="onSearchEnter()"
                class="search-input">
+        <button mat-icon-button *ngIf="searchControl.value" (click)="clearSearch()" class="clear-btn">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-autocomplete #searchAuto="matAutocomplete" class="search-autocomplete">
+          <mat-option *ngIf="isSearching" disabled>
+            <mat-spinner diameter="20"></mat-spinner>
+          </mat-option>
+          <mat-option *ngFor="let user of searchResults" (click)="selectUser(user)">
+            <div class="search-result-item">
+              <div class="search-avatar">
+                <img *ngIf="user.avatarUrl" [src]="getAvatarUrl(user.avatarUrl)" alt="Avatar">
+                <mat-icon *ngIf="!user.avatarUrl">account_circle</mat-icon>
+              </div>
+              <div class="search-user-info">
+                <span class="search-display-name">{{ user.displayName }}</span>
+                <span class="search-username">{{'@'}}{{ user.username }}</span>
+              </div>
+            </div>
+          </mat-option>
+          <mat-option *ngIf="!isSearching && searchControl.value && searchControl.value.length >= 2 && searchResults.length === 0" disabled>
+            No users found
+          </mat-option>
+        </mat-autocomplete>
       </div>
 
       <div class="toolbar-spacer"></div>

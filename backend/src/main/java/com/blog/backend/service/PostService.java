@@ -255,6 +255,7 @@ public class PostService {
                 post.getUser().getId(),
                 post.getUser().getUsername(),
                 post.getUser().getDisplayName(),
+                post.getUser().getAvatarUrl(),
                 post.getLikes().size(),
                 post.getComments().size(),
                 isLiked,

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { UserService } from '../../../../core/services/user.service';
+import { FileService } from '../../../../core/services/file.service';
 import { UserProfile } from '../../../../core/models';
 
 @Component({
@@ -18,10 +19,19 @@ export class UserSearchComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private router: Router
+    private fileService: FileService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    // Check for query parameter from navbar search
+    this.route.queryParams.subscribe(params => {
+      if (params['q']) {
+        this.searchControl.setValue(params['q']);
+      }
+    });
+
     this.searchControl.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
@@ -44,6 +54,11 @@ export class UserSearchComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  getAvatarUrl(avatarUrl: string | undefined): string {
+    if (!avatarUrl) return '';
+    return this.fileService.getFullMediaUrl(avatarUrl);
   }
 
   viewProfile(userId: number): void {

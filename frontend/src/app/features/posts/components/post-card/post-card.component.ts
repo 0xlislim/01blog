@@ -40,6 +40,11 @@ export class PostCardComponent {
     return this.fileService.getFullMediaUrl(this.post.mediaUrl);
   }
 
+  getAvatarUrl(): string {
+    if (!this.post.userAvatarUrl) return '';
+    return this.fileService.getFullMediaUrl(this.post.userAvatarUrl);
+  }
+
   get isOwnPost(): boolean {
     return this.post.userId === this.authService.getCurrentUserId();
   }

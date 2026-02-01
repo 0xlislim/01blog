@@ -36,7 +36,7 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Display Name</mat-label>
-      <input matInput formControlName="displayName" placeholder="Enter your display name">
+      <input matInput formControlName="displayName">
       <mat-hint>{{ profileForm.get('displayName')?.value?.length || 0 }}/50</mat-hint>
       <mat-error *ngIf="profileForm.get('displayName')?.invalid">
         {{ getErrorMessage('displayName') }}
@@ -46,7 +46,6 @@
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Bio</mat-label>
       <textarea matInput formControlName="bio"
-                placeholder="Tell us about yourself..."
                 rows="4"
                 cdkTextareaAutosize
                 cdkAutosizeMinRows="3"

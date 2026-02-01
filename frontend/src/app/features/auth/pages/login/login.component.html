@@ -9,7 +9,7 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Username or Email</mat-label>
-          <input matInput formControlName="usernameOrEmail" placeholder="Enter username or email">
+          <input matInput formControlName="usernameOrEmail">
           <mat-icon matPrefix>person</mat-icon>
           <mat-error *ngIf="loginForm.get('usernameOrEmail')?.invalid">
             {{ getErrorMessage('usernameOrEmail') }}
@@ -19,8 +19,7 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Password</mat-label>
           <input matInput formControlName="password"
-                 [type]="hidePassword ? 'password' : 'text'"
-                 placeholder="Enter password">
+                 [type]="hidePassword ? 'password' : 'text'">
           <mat-icon matPrefix>lock</mat-icon>
           <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
             <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>

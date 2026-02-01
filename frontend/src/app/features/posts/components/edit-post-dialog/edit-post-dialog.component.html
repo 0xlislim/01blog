@@ -3,9 +3,8 @@
 <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
   <mat-dialog-content>
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Content</mat-label>
+      <mat-label>Post content</mat-label>
       <textarea matInput formControlName="content"
-                placeholder="What's on your mind?"
                 rows="5"
                 cdkTextareaAutosize
                 cdkAutosizeMinRows="3"
