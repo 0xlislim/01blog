@@ -6,7 +6,7 @@ A fullstack social blogging platform where students can share their learning exp
 
 ### Backend
 - **Framework:** Java Spring Boot
-- **Database:** PostgreSQL / MySQL
+- **Database:** PostgreSQL
 - **Authentication:** JWT (JSON Web Tokens)
 - **ORM:** JPA / Hibernate
 - **Build Tool:** Maven
@@ -17,6 +17,11 @@ A fullstack social blogging platform where students can share their learning exp
 - **State Management:** RxJS
 - **Language:** TypeScript
 - **Styling:** SCSS
+
+### DevOps
+- **Containerization:** Docker & Docker Compose
+- **Automation:** Make, Bash scripts
+- **Database Init:** SQL scripts
 
 ## Features
 
@@ -30,11 +35,11 @@ A fullstack social blogging platform where students can share their learning exp
 
 ## Prerequisites
 
-- **Java:** JDK 17 or higher
-- **Node.js:** v18 or higher
-- **npm:** v9 or higher
-- **PostgreSQL:** v14 or higher (or MySQL v8+)
-- **Maven:** v3.8 or higher
+- **Docker:** v20 or higher
+- **Docker Compose:** v2 or higher
+- **Make:** GNU Make
+
+> Run `make help` to see all available commands.
 
 ## Getting Started
 
@@ -45,81 +50,109 @@ git clone https://github.com/yourusername/01blog.git
 cd 01blog
 ```
 
-### 2. Database Setup
+### 2. Initial Setup
 
-Create a PostgreSQL database:
-
-```sql
-CREATE DATABASE blog01db;
-```
-
-### 3. Backend Setup
-
-Navigate to the backend directory:
+Run the setup script to configure the environment:
 
 ```bash
-cd backend
+make setup
 ```
 
-Configure the database connection in `src/main/resources/application.properties`:
+This will:
+- Create necessary configuration files
+- Set up environment variables
+- Initialize the database
 
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/blog01db
-spring.datasource.username=your_username
-spring.datasource.password=your_password
-```
+### 3. Start Development Server
 
-Run the backend application:
+Start all services (backend, frontend, database) with Docker:
 
 ```bash
-./mvnw spring-boot:run
+make dev
 ```
 
-The backend will start at `http://localhost:8080`.
+- Backend will start at `http://localhost:8080`
+- Frontend will start at `http://localhost:4200`
 
-### 4. Frontend Setup
+### 4. Verify Services
 
-Navigate to the frontend directory:
+Check that all services are running:
 
 ```bash
-cd frontend
+make health
 ```
 
-Install dependencies:
+View running containers:
 
 ```bash
-npm install
+make ps
 ```
-
-Start the development server:
-
-```bash
-npm start
-# or
-ng serve
-```
-
-The frontend will start at `http://localhost:4200`.
 
 ## Development Commands
 
-### Backend
+### Setup & Deployment
 
 | Command | Description |
 |---------|-------------|
-| `./mvnw spring-boot:run` | Run the application |
-| `./mvnw clean install` | Build the project |
-| `./mvnw test` | Run tests |
-| `./mvnw package` | Package as JAR |
+| `make setup` | Initial project setup |
+| `make dev` | Start all services in development mode |
+| `make stop` | Stop all services |
+| `make restart` | Restart all services |
+| `make build` | Build Docker images |
+| `make build-no-cache` | Build Docker images without cache |
+| `make clean` | Clean up Docker resources |
 
-### Frontend
+### Monitoring
 
 | Command | Description |
 |---------|-------------|
-| `npm start` | Start development server |
-| `npm run build` | Build for production |
-| `npm test` | Run unit tests |
-| `ng lint` | Run linter |
+| `make logs` | View all logs |
+| `make logs-be` | View backend logs |
+| `make logs-fe` | View frontend logs |
+| `make logs-db` | View database logs |
+| `make health` | Run health check |
+| `make ps` | Show running containers |
+| `make stats` | Show container resource usage |
+
+### Testing
+
+| Command | Description |
+|---------|-------------|
+| `make test` | Run all tests |
+| `make test-be` | Run backend tests only |
+| `make test-fe` | Run frontend tests only |
+
+### Database
+
+| Command | Description |
+|---------|-------------|
+| `make db-shell` | Open PostgreSQL shell |
+| `make db-reset` | Reset database (DESTRUCTIVE) |
+
+### User Management
+
+| Command | Description |
+|---------|-------------|
+| `make users` | List all users |
+| `make promote USER=<username>` | Promote user to admin |
+| `make demote USER=<username>` | Demote admin to user |
+| `make create-admin USER=x EMAIL=y PASS=z` | Create admin user |
+
+### Backup & Restore
+
+| Command | Description |
+|---------|-------------|
+| `make backup` | Create backup |
+| `make restore-db FILE=<file>` | Restore database from backup |
+| `make restore-uploads FILE=<file>` | Restore uploads from backup |
+
+### Utility
+
+| Command | Description |
+|---------|-------------|
+| `make shell-be` | Open shell in backend container |
+| `make shell-fe` | Open shell in frontend container |
+| `make prune` | Remove all unused Docker resources |
 
 ## API Documentation
 
@@ -165,6 +198,7 @@ The backend exposes REST APIs at `http://localhost:8080/api`:
 │   │   │   ├── java/       # Java source files
 │   │   │   └── resources/  # Configuration files
 │   │   └── test/           # Test files
+│   ├── Dockerfile
 │   └── pom.xml
 ├── frontend/                # Angular application
 │   ├── src/
@@ -175,40 +209,110 @@ The backend exposes REST APIs at `http://localhost:8080/api`:
 │   │   │   └── layout/     # Layout components
 │   │   ├── assets/
 │   │   └── environments/
+│   ├── Dockerfile
 │   ├── angular.json
 │   └── package.json
+├── scripts/                 # Automation scripts
+│   ├── setup.sh            # Initial project setup
+│   ├── deploy.sh           # Start services
+│   ├── stop.sh             # Stop services
+│   ├── restart.sh          # Restart services
+│   ├── backup.sh           # Create backups
+│   ├── restore.sh          # Restore from backup
+│   ├── health-check.sh     # Health check
+│   ├── logs.sh             # View logs
+│   ├── manage-users.sh     # User management
+│   ├── cleanup.sh          # Clean Docker resources
+│   └── init-db.sql         # Database initialization
+├── docs/                    # Documentation
+│   ├── BACKEND_DOCUMENTATION.md
+│   ├── BACKEND_DOCUMENTATION_TECH.md
+│   ├── FRONTEND_DOCUMENTATION.md
+│   └── DEPLOYMENT.md
+├── backups/                 # Backup storage
+├── docker-compose.yml       # Docker services configuration
+├── Makefile                 # Make commands
+├── .env                     # Environment variables
 └── README.md
 ```
 
 ## Testing
 
-### Backend Tests
+### Run All Tests
 ```bash
-cd backend
-./mvnw test
+make test
 ```
 
-### Frontend Tests
+### Backend Tests Only
 ```bash
-cd frontend
-npm test
+make test-be
+```
+
+### Frontend Tests Only
+```bash
+make test-fe
 ```
 
 ## Deployment
 
-### Backend
+### Build and Deploy with Docker
+
 ```bash
-cd backend
-./mvnw package
-java -jar target/backend-0.0.1-SNAPSHOT.jar
+# Build Docker images
+make build
+
+# Start all services
+make dev
+
+# Check health status
+make health
 ```
 
-### Frontend
+### Create Backups
+
 ```bash
-cd frontend
-npm run build
-# Serve the dist/frontend folder with a web server
+# Create a full backup (database + uploads)
+make backup
 ```
+
+### Restore from Backup
+
+```bash
+# Restore database
+make restore-db FILE=backups/db_backup_2024-01-15.sql
+
+# Restore uploads
+make restore-uploads FILE=backups/uploads_backup_2024-01-15.tar.gz
+```
+
+## Default Accounts
+
+After setup, you can create an admin user:
+
+```bash
+make create-admin USER=admin EMAIL=admin@example.com PASS=admin123
+```
+
+Or promote an existing user:
+
+```bash
+make promote USER=username
+```
+
+## Environment Variables
+
+The `.env` file contains configuration for all services:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `POSTGRES_DB` | Database name | `blog_db` |
+| `POSTGRES_USER` | Database user | `postgres` |
+| `POSTGRES_PASSWORD` | Database password | - |
+| `JWT_SECRET` | JWT signing secret | - |
+| `BACKEND_PORT` | Backend server port | `8080` |
+| `FRONTEND_PORT` | Frontend server port | `4200` |
+
+> The `make setup` command will create the `.env` file with default values.
 
 ## Security
 
@@ -217,6 +321,56 @@ npm run build
 - Passwords are hashed using bcrypt
 - CORS configured for frontend origin
 - Input validation and sanitization implemented
+
+## Troubleshooting
+
+### Services won't start
+```bash
+# Check container status
+make ps
+
+# View logs for errors
+make logs
+
+# Rebuild containers
+make build-no-cache
+make dev
+```
+
+### Database connection issues
+```bash
+# Check database logs
+make logs-db
+
+# Reset database (WARNING: deletes all data)
+make db-reset
+make dev
+```
+
+### Port already in use
+```bash
+# Stop all services
+make stop
+
+# Check what's using the port
+lsof -i :8080
+lsof -i :4200
+```
+
+### Clean restart
+```bash
+make stop
+make clean
+make build
+make dev
+```
+
+## Documentation
+
+- [Backend API Documentation](docs/BACKEND_DOCUMENTATION.md)
+- [Backend Technical Details](docs/BACKEND_DOCUMENTATION_TECH.md)
+- [Frontend Documentation](docs/FRONTEND_DOCUMENTATION.md)
+- [Deployment Guide](docs/DEPLOYMENT.md)
 
 ## Contributing
 
