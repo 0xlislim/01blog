@@ -10,6 +10,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../services/auth.service';
 
 @Injectable()
@@ -17,7 +18,8 @@ export class ErrorInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -33,6 +35,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           switch (error.status) {
             case 401:
               errorMessage = 'Session expired. Please log in again.';
+              this.dialog.closeAll();
               this.authService.logout();
               this.router.navigate(['/auth/login']);
               break;

@@ -137,4 +137,8 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     this.searchControl.setValue('');
     this.searchResults = [];
   }
+
+  toggleMobileSearch(): void {
+    this.router.navigate(['/users/search']);
+  }
 }

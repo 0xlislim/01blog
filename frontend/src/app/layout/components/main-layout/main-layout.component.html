@@ -105,6 +105,11 @@
 
       <div class="toolbar-spacer"></div>
 
+      <!-- Mobile Search Button -->
+      <button mat-icon-button *ngIf="isHandset$ | async" (click)="toggleMobileSearch()" matTooltip="Search">
+        <mat-icon>search</mat-icon>
+      </button>
+
       <!-- Notification Icon -->
       <button mat-icon-button routerLink="/notifications" matTooltip="Notifications">
         <mat-icon [matBadge]="unreadCount$ | async" matBadgeColor="warn" matBadgeSize="small"

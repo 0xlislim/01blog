@@ -316,6 +316,37 @@ a {
   -webkit-overflow-scrolling: touch;
 }
 
+// Mobile-specific improvements
+@media (max-width: $breakpoint-sm - 1) {
+  // Improve touch targets
+  .mat-mdc-button,
+  .mat-mdc-raised-button,
+  .mat-mdc-stroked-button,
+  .mat-mdc-flat-button {
+    min-height: 44px;
+  }
+
+  .mat-mdc-icon-button {
+    width: 44px;
+    height: 44px;
+  }
+
+  // Better mobile card spacing
+  .mat-mdc-card {
+    margin-bottom: 12px;
+  }
+
+  // Responsive dialog
+  .cdk-overlay-pane {
+    max-width: 95vw !important;
+  }
+
+  // Improve form field spacing
+  .mat-mdc-form-field {
+    margin-bottom: 4px;
+  }
+}
+
 // Skeleton loading animation
 @keyframes skeleton-loading {
   0% {

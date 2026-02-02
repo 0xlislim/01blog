@@ -30,7 +30,7 @@ export class RegisterComponent implements OnInit {
         Validators.maxLength(20),
         Validators.pattern(/^[a-zA-Z0-9_]+$/)
       ]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
       displayName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
@@ -85,9 +85,6 @@ export class RegisterComponent implements OnInit {
     if (control?.hasError('required')) {
       return this.getFieldLabel(field) + ' is required';
     }
-    if (control?.hasError('email')) {
-      return 'Please enter a valid email address';
-    }
     if (control?.hasError('minlength')) {
       const minLength = control.errors?.['minlength']?.requiredLength;
       return `${this.getFieldLabel(field)} must be at least ${minLength} characters`;
@@ -97,6 +94,9 @@ export class RegisterComponent implements OnInit {
       return `${this.getFieldLabel(field)} must be at most ${maxLength} characters`;
     }
     if (control?.hasError('pattern')) {
+      if (field === 'email') {
+        return 'Please enter a valid email address (e.g., user@example.com)';
+      }
       return 'Username can only contain letters, numbers, and underscores';
     }
     if (control?.hasError('passwordMismatch')) {

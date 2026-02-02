@@ -96,15 +96,38 @@
     opacity: 1;
   }
 
+  // Always show actions on mobile (no hover)
+  @media (max-width: 599px) {
+    opacity: 1;
+  }
+
   button {
     width: 32px;
     height: 32px;
     line-height: 32px;
+
+    @media (max-width: 599px) {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+    }
 
     mat-icon {
       font-size: 18px;
       width: 18px;
       height: 18px;
     }
+  }
+}
+
+// Mobile adjustments
+@media (max-width: 599px) {
+  .notification-item {
+    padding: 12px;
+  }
+
+  .notification-icon {
+    width: 36px;
+    height: 36px;
   }
 }

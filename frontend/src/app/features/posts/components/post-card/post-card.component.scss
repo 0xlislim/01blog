@@ -3,6 +3,11 @@
   margin-bottom: 16px;
   transition: box-shadow 0.2s ease-in-out;
 
+  @media (max-width: 599px) {
+    margin-bottom: 12px;
+    border-radius: 0 !important;
+  }
+
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
@@ -12,11 +17,20 @@
     top: 8px;
     right: 8px;
     z-index: 1;
+
+    @media (max-width: 599px) {
+      top: 4px;
+      right: 4px;
+    }
   }
 
   mat-card-header {
     position: relative;
     padding-bottom: 8px;
+
+    @media (max-width: 599px) {
+      padding: 12px 12px 8px 12px;
+    }
 
     .post-avatar {
       cursor: pointer;
@@ -74,12 +88,20 @@
   }
 
   mat-card-content {
+    @media (max-width: 599px) {
+      padding: 0 12px !important;
+    }
+
     .post-content {
       font-size: 15px;
       line-height: 1.5;
       white-space: pre-wrap;
       word-wrap: break-word;
       margin: 0 0 12px 0;
+
+      @media (max-width: 599px) {
+        font-size: 14px;
+      }
     }
 
     .media-container {
@@ -87,11 +109,21 @@
       overflow: hidden;
       margin-top: 12px;
 
+      @media (max-width: 599px) {
+        border-radius: 0;
+        margin-left: -12px;
+        margin-right: -12px;
+      }
+
       .post-media {
         width: 100%;
         max-height: 500px;
         object-fit: contain;
         background-color: #f5f5f5;
+
+        @media (max-width: 599px) {
+          max-height: 400px;
+        }
       }
     }
   }
@@ -100,6 +132,10 @@
     padding: 0 8px;
     display: flex;
     align-items: center;
+
+    @media (max-width: 599px) {
+      padding: 0 4px;
+    }
 
     button {
       color: rgba(0, 0, 0, 0.6);
