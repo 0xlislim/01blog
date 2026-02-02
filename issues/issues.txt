@@ -1,1 +1,1 @@
-trim spaces in inputes 
+- timestamp should UTC+1 not UTC

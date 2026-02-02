@@ -103,8 +103,10 @@ export class EditProfileDialogComponent implements OnInit {
         this.isUploading = false;
       }
 
+      // Trim whitespace from string fields
       this.dialogRef.close({
-        ...this.profileForm.value,
+        displayName: this.profileForm.value.displayName?.trim(),
+        bio: this.profileForm.value.bio?.trim() || '',
         avatarUrl: this.avatarUrl || null
       });
     } catch {

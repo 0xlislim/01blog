@@ -78,7 +78,7 @@ export class CreatePostDialogComponent implements OnInit {
 
       // Create post
       const postData = {
-        content: this.postForm.value.content,
+        content: this.postForm.value.content?.trim(),
         mediaUrl: this.uploadedMediaUrl || undefined,
         mediaType: this.uploadedMediaUrl && this.uploadedFile ? this.uploadedFile.type : undefined
       };

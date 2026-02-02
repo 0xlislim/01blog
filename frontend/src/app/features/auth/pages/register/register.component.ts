@@ -57,7 +57,15 @@ export class RegisterComponent implements OnInit {
     this.isLoading = true;
     const { confirmPassword, ...registerData } = this.registerForm.value;
 
-    this.authService.register(registerData).subscribe({
+    // Trim whitespace from string fields
+    const trimmedData = {
+      ...registerData,
+      username: registerData.username?.trim(),
+      email: registerData.email?.trim(),
+      displayName: registerData.displayName?.trim()
+    };
+
+    this.authService.register(trimmedData).subscribe({
       next: (response) => {
         this.snackBar.open(response.message || 'Registration successful! Please sign in.', 'Close', {
           duration: 5000,

@@ -35,7 +35,14 @@ export class LoginComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.authService.login(this.loginForm.value).subscribe({
+
+    // Trim whitespace from username/email
+    const loginData = {
+      ...this.loginForm.value,
+      usernameOrEmail: this.loginForm.value.usernameOrEmail?.trim()
+    };
+
+    this.authService.login(loginData).subscribe({
       next: () => {
         this.snackBar.open('Login successful!', 'Close', {
           duration: 3000,
