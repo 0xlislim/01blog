@@ -16,6 +16,7 @@ export interface JwtResponse {
   userId: number;
   username: string;
   role: 'USER' | 'ADMIN';
+  avatarUrl?: string;
 }
 
 export interface MessageResponse {

@@ -70,6 +70,15 @@ export class AuthService {
     this.currentUserSubject.next(response);
   }
 
+  updateStoredUserAvatar(avatarUrl: string | null): void {
+    const currentUser = this.currentUserSubject.value;
+    if (currentUser) {
+      const updatedUser = { ...currentUser, avatarUrl: avatarUrl || undefined };
+      localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+      this.currentUserSubject.next(updatedUser);
+    }
+  }
+
   private getStoredUser(): JwtResponse | null {
     const userStr = localStorage.getItem(USER_KEY);
     if (!userStr) return null;

@@ -10,7 +10,8 @@
     <!-- User Info Section -->
     <div class="sidenav-user-section" *ngIf="currentUser$ | async as user">
       <div class="user-avatar">
-        <mat-icon>account_circle</mat-icon>
+        <img *ngIf="user.avatarUrl" [src]="getAvatarUrl(user.avatarUrl)" alt="Avatar" class="sidebar-avatar-img">
+        <mat-icon *ngIf="!user.avatarUrl">account_circle</mat-icon>
       </div>
       <div class="user-info">
         <span class="user-name">{{ user.username }}</span>

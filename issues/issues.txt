@@ -1,1 +1,1 @@
-- timestamp should UTC+1 not UTC
+- add comfirmations before submitting a report [post/user]

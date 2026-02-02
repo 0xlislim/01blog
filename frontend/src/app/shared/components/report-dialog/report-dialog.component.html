@@ -1,6 +1,7 @@
 <h2 mat-dialog-title>{{ isPostReport ? 'Report Post' : 'Report User' }}</h2>
 
-<form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+<!-- Form Step -->
+<form [formGroup]="reportForm" (ngSubmit)="onSubmit()" *ngIf="!showConfirmation">
   <mat-dialog-content>
     <p class="report-info" *ngIf="!isPostReport">
       You are about to report <strong>{{'@'}}{{ data.username }}</strong>.
@@ -35,10 +36,42 @@
     <button mat-button type="button" (click)="onCancel()" [disabled]="isSubmitting">
       Cancel
     </button>
-    <button mat-raised-button color="warn" type="submit"
+    <button mat-raised-button color="primary" type="submit"
             [disabled]="reportForm.invalid || isSubmitting">
+      Continue
+    </button>
+  </mat-dialog-actions>
+</form>
+
+<!-- Confirmation Step -->
+<div *ngIf="showConfirmation">
+  <mat-dialog-content>
+    <div class="confirmation-content">
+      <mat-icon class="confirmation-icon" color="warn">report_problem</mat-icon>
+      <h3>Confirm Report Submission</h3>
+      <p>Are you sure you want to submit this report?</p>
+
+      <div class="report-summary">
+        <p><strong>Reporting:</strong> {{ isPostReport ? 'Post' : '@' + data.username }}</p>
+        <p><strong>Reason:</strong></p>
+        <blockquote class="reason-preview">{{ reportForm.get('reason')?.value }}</blockquote>
+      </div>
+
+      <p class="report-warning">
+        <mat-icon color="warn">warning</mat-icon>
+        This action cannot be undone.
+      </p>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onBackToForm()" [disabled]="isSubmitting">
+      Back
+    </button>
+    <button mat-raised-button color="warn" type="button"
+            (click)="onConfirmReport()" [disabled]="isSubmitting">
       <mat-spinner *ngIf="isSubmitting" diameter="18"></mat-spinner>
       <span *ngIf="!isSubmitting">Submit Report</span>
     </button>
   </mat-dialog-actions>
-</form>
+</div>

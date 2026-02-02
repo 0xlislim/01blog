@@ -53,10 +53,10 @@ export class NotificationListComponent implements OnInit {
 
   onMarkAsRead(id: number): void {
     this.notificationService.markAsRead(id).subscribe({
-      next: (updated) => {
+      next: () => {
         const index = this.notifications.findIndex(n => n.id === id);
         if (index !== -1) {
-          this.notifications[index] = updated;
+          this.notifications[index] = { ...this.notifications[index], read: true };
         }
       },
       error: () => {

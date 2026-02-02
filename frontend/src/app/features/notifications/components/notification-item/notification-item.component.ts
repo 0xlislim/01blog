@@ -68,7 +68,15 @@ export class NotificationItemComponent {
   }
 
   formatTime(dateString: string): string {
+    if (!dateString) {
+      return '';
+    }
+
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return '';
+    }
+
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);

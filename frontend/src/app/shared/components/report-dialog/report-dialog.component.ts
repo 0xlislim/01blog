@@ -17,6 +17,7 @@ export interface ReportDialogData {
 export class ReportDialogComponent implements OnInit {
   reportForm!: FormGroup;
   isSubmitting = false;
+  showConfirmation = false;
 
   constructor(
     private fb: FormBuilder,
@@ -51,6 +52,11 @@ export class ReportDialogComponent implements OnInit {
       return;
     }
 
+    // Show confirmation step
+    this.showConfirmation = true;
+  }
+
+  onConfirmReport(): void {
     const result: any = {
       reason: this.reportForm.get('reason')?.value.trim()
     };
@@ -62,6 +68,10 @@ export class ReportDialogComponent implements OnInit {
     }
 
     this.dialogRef.close(result);
+  }
+
+  onBackToForm(): void {
+    this.showConfirmation = false;
   }
 
   onCancel(): void {

@@ -22,14 +22,14 @@ export class NotificationService {
     return this.http.get<Notification[]>(`${this.apiUrl}/unread`);
   }
 
-  getUnreadCount(): Observable<{ count: number }> {
-    return this.http.get<{ count: number }>(`${this.apiUrl}/unread-count`).pipe(
-      tap(response => this.unreadCountSubject.next(response.count))
+  getUnreadCount(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/unread-count`).pipe(
+      tap(count => this.unreadCountSubject.next(count))
     );
   }
 
-  markAsRead(id: number): Observable<Notification> {
-    return this.http.put<Notification>(`${this.apiUrl}/${id}/read`, {}).pipe(
+  markAsRead(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}/read`, {}).pipe(
       tap(() => {
         const currentCount = this.unreadCountSubject.value;
         if (currentCount > 0) {

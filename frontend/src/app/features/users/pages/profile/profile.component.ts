@@ -92,6 +92,10 @@ export class ProfileComponent implements OnInit {
         this.userService.updateProfile(this.user.id, result).subscribe({
           next: (updatedUser) => {
             this.user = updatedUser;
+            // Update stored user avatar in AuthService
+            if (this.isOwnProfile) {
+              this.authService.updateStoredUserAvatar(updatedUser.avatarUrl || null);
+            }
             this.snackBar.open('Profile updated successfully', 'Close', {
               duration: 3000,
               panelClass: ['success-snackbar']
